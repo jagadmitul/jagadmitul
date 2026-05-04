@@ -547,71 +547,77 @@ export const NAV = [
 
 export const CHATBOT_PROMPTS = [
   {
-    id: "rate",
-    prompt: "What's your rate?",
+    id: "pricing",
+    prompt: "Pricing",
     answer:
-      "Day rates start at $450 / ₹35K for senior engineering work. Project pricing on request — drop me a brief at jagadmitul@gmail.com.",
+      "Engagements are scoped per project. A one-week consult typically starts around $2,500. An embedded 3–6 month senior contract usually lands in the $8K–$15K/month range depending on hours and scope. Send a short brief to jagadmitul@gmail.com and I'll send a tailored proposal within 24 hours.",
   },
   {
     id: "availability",
-    prompt: "Are you available?",
+    prompt: "Availability",
     answer:
-      "Yes — open to contract (3–6 months) or the right full-time role. I currently have ~30 hrs/week capacity.",
+      "Currently open for senior engagements. I have approximately 30 hours per week of capacity — well-suited for a 3–6 month embedded contract or the right full-time senior / staff role. Happy to share my calendar on the first call.",
   },
   {
     id: "stack",
-    prompt: "What's your stack?",
+    prompt: "Tech stack",
     answer:
-      "TypeScript everywhere. Next.js + NestJS for full-stack. Python + LangChain/LangGraph for AI agents. Postgres + Prisma + Redis. AWS, Docker, Vercel.",
+      "TypeScript end-to-end. Next.js and React on the frontend, NestJS and Node.js on the backend, Python with LangChain and LangGraph for AI agent work, PostgreSQL with Prisma, Redis for caching, AWS for infrastructure, Docker, and Vercel for deployment.",
   },
   {
-    id: "recent",
-    prompt: "Tell me about your recent work",
+    id: "experience",
+    prompt: "Recent work",
     answer:
-      "Led MedChron.AI's full-stack — 100K-user healthcare platform with SSO, MFE, and AI agent pipelines. Before that: TAPUZ SQL optimization (50s → 4s, 92% faster), and 5 years across contracts in SaaS and FinTech.",
+      "Led full-stack engineering at MedChron.AI — a 100,000-user healthcare platform with enterprise SSO, micro-frontend architecture, and production AI agent pipelines. Earlier I optimized SQL performance at TAPUZ (Israel's largest shipping platform) from over 50 seconds to under 4 seconds — a 92% improvement that scaled peak capacity 5×.",
   },
   {
     id: "ai",
-    prompt: "Do you build AI agents?",
+    prompt: "AI agents",
     answer:
-      "Yes — production multi-step agents with LangChain / LangGraph orchestration. Tool-use, structured output, human-in-the-loop checkpoints, observability. The agents that handle real load and real edge cases, not the demo kind.",
+      "Yes — I build production-grade multi-step agents with LangChain and LangGraph orchestration. Tool-use, structured output parsing, human-in-the-loop checkpoints, and end-to-end observability. The kind that handle real production load and edge cases, not demos.",
   },
   {
     id: "location",
-    prompt: "Where are you based?",
+    prompt: "Location",
     answer:
-      "Surat, India (UTC+05:30). I work remote across US, UK, AU, IL timezones — comfortable with overnight async.",
+      "Based in Surat, Gujarat (UTC+05:30). Working remote across US, UK, Australia and Israel timezones — fully comfortable with overnight async collaboration and shared deep-work windows.",
   },
   {
     id: "start",
-    prompt: "How do we start?",
+    prompt: "How to start",
     answer:
-      "Send a 5-line brief to jagadmitul@gmail.com — what you're building, your stack, your timeline. I reply within 24h with a 30-min call link if it's a fit.",
+      "Send a short brief to jagadmitul@gmail.com — what you're building, your current stack, the immediate need, and a rough timeline. I reply within 24 hours with a 30-minute introductory call link if there's a fit.",
   },
 ];
 
 const CHATBOT_KEYWORDS: Record<string, string> = {
-  rate: "rate",
-  price: "rate",
-  pricing: "rate",
-  cost: "rate",
-  charge: "rate",
-  budget: "rate",
+  pricing: "pricing",
+  price: "pricing",
+  cost: "pricing",
+  charge: "pricing",
+  budget: "pricing",
+  rate: "pricing",
+  quote: "pricing",
   available: "availability",
   availability: "availability",
   free: "availability",
   hire: "availability",
+  hiring: "availability",
   capacity: "availability",
   stack: "stack",
   tech: "stack",
+  technology: "stack",
   language: "stack",
   framework: "stack",
-  recent: "recent",
-  work: "recent",
-  project: "recent",
-  experience: "recent",
-  built: "recent",
-  ship: "recent",
+  tools: "stack",
+  experience: "experience",
+  recent: "experience",
+  work: "experience",
+  project: "experience",
+  projects: "experience",
+  shipped: "experience",
+  built: "experience",
+  past: "experience",
   ai: "ai",
   agent: "ai",
   agents: "ai",
@@ -624,15 +630,19 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   where: "location",
   remote: "location",
   timezone: "location",
+  india: "location",
+  surat: "location",
   start: "start",
   begin: "start",
   process: "start",
   next: "start",
   email: "start",
+  contact: "start",
+  reach: "start",
 };
 
 const CHATBOT_FALLBACK =
-  "I don't have a scripted answer for that — drop me an email at jagadmitul@gmail.com and I'll reply within 24h.";
+  "I don't have a scripted answer for that one. The fastest way is to send a short brief to jagadmitul@gmail.com — I reply within 24 hours.";
 
 export function matchPrompt(question: string): string {
   const q = question.toLowerCase();

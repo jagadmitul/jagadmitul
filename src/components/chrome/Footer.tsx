@@ -63,7 +63,7 @@ export function Footer() {
 
       <div className="mt-8 pt-6 border-t border-hairline flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-ink-mute uppercase tracking-wider">
         <span>© 2026 — Mitul Jagad</span>
-        <span>Built in Surat · Ships Global</span>
+        <span>All rights reserved</span>
       </div>
     </footer>
   );

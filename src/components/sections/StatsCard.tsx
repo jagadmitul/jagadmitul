@@ -64,7 +64,7 @@ export function StatsCard() {
         ))}
       </div>
 
-      <div className="mt-5 pt-4 border-t border-hairline flex items-center justify-between">
+      <div className="mt-auto pt-4 border-t border-hairline flex items-center justify-between">
         <span className="text-[0.65rem] font-mono uppercase tracking-wider text-ink-mute">
           PROD-VERIFIED · 2020–2026
         </span>

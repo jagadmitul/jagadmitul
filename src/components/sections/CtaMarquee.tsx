@@ -14,7 +14,7 @@ const PHRASES = [
 
 export function CtaMarquee() {
   return (
-    <div className="rounded-2xl bg-ink p-6 lg:p-8 text-paper relative overflow-hidden flex flex-col h-full min-h-[28rem]">
+    <div className="rounded-2xl bg-ink p-6 lg:p-8 text-paper relative overflow-hidden flex flex-col h-full">
       {/* Animated radial gradient that recolors with theme */}
       <div
         className="absolute inset-0 opacity-40 pointer-events-none"
