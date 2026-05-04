@@ -105,4 +105,15 @@ try {
     document.documentElement.dataset.palette = p;
   }
 } catch (e) {}
+// Pin scroll behaviour to manual + force scrollTop=0 BEFORE any layout
+// happens. Browser's auto scroll restoration was firing after hydration
+// and producing a small downward scroll on every refresh because the
+// page's final height differed from the height at restoration time
+// (fonts, ScrollReveal initial state, R3F canvas mount).
+try {
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+} catch (e) {}
 `.trim();

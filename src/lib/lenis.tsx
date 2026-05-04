@@ -14,14 +14,21 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (reduced) return;
+    // Force the page to start at scroll=0 BEFORE Lenis initialises so
+    // there's no mismatch between the browser's restored position and
+    // Lenis's internal state. NO_FLASH_SCRIPT also does this, but doing
+    // it again here covers the post-hydration window when fonts and
+    // dynamic content could have nudged the scroll.
+    window.scrollTo(0, 0);
     const lenis = new Lenis({
-      // Lerp-only mode (no duration) — feels snappier and more responsive
-      // than the previous duration-based easing which felt heavy/tight.
       lerp: 0.12,
       smoothWheel: true,
       wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
     });
+    // Tell Lenis its current scroll is exactly 0 — overrides any value it
+    // would have read from window.scrollY.
+    lenis.scrollTo(0, { immediate: true });
     let frameId = 0;
     const raf = (time: number) => {
       lenis.raf(time);
