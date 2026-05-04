@@ -86,9 +86,32 @@ export default async function ArticlePage({
               <p className="text-lg text-ink-mute leading-relaxed">
                 {article.excerpt}
               </p>
-              <div className="p-6 rounded-xl bg-paper border-l-4 border-primary">
-                <p className="text-sm text-ink-mute italic">
-                  📝 This article is published in full on Mitul&apos;s LinkedIn — read the complete piece there. The summary above is a sourced excerpt.
+              <div
+                className="p-6 lg:p-8 rounded-2xl border border-primary/20 relative overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, transparent), color-mix(in srgb, var(--primary) 4%, transparent) 60%, transparent)",
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute top-3 right-4 font-display select-none pointer-events-none"
+                  style={{
+                    fontStyle: "italic",
+                    fontWeight: 400,
+                    fontSize: "6rem",
+                    lineHeight: 1,
+                    color: "var(--primary)",
+                    opacity: 0.22,
+                  }}
+                >
+                  &ldquo;
+                </span>
+                <div className="text-[0.7rem] font-mono uppercase tracking-[0.18em] text-primary mb-3">
+                  PUBLISHED ON LINKEDIN
+                </div>
+                <p className="text-sm text-ink-mute italic leading-relaxed">
+                  This article is published in full on Mitul&apos;s LinkedIn — read the complete piece there. The summary above is a sourced excerpt.
                 </p>
                 <a
                   href="https://www.linkedin.com/in/jagadmitul/recent-activity/all/"
