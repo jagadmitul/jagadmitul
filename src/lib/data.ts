@@ -19,7 +19,7 @@ export const PROFILE = {
   phone: "+91 7383348315",
   linkedin: "https://www.linkedin.com/in/jagadmitul",
   github: "https://github.com/jagadmitul",
-  resumeUrl: "https://tinyurl.com/mitul-resume",
+  resumeUrl: "/resume.pdf",
   yearsExperience: 5,
   status: "OPEN_TO_WORK" as const,
   capacity: "~30 hrs/week",
