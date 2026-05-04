@@ -39,18 +39,16 @@ export function IntroCard() {
             border: "1px dashed var(--primary)",
           }}
         />
-        {/* Monogram — Fraunces variable serif at black italic for a real
-            monogram feel (vs the workhorse Bricolage Grotesque used for
-            body text). Optical-size axis pushed to 144 for display weight. */}
+        {/* Monogram — Instrument Serif italic. Single-weight (400) font
+            with a striking, characterful italic; reads as editorial/display
+            even without a heavy weight. */}
         <div className="absolute inset-0 grid place-items-center">
           <div
             className="font-display text-primary leading-none select-none"
             style={{
               fontStyle: "italic",
-              fontWeight: 700,
-              fontSize: "clamp(5rem, 9vw, 8rem)",
-              fontVariationSettings: '"opsz" 144, "SOFT" 50',
-              letterSpacing: "-0.04em",
+              fontSize: "clamp(6rem, 11vw, 10rem)",
+              letterSpacing: "-0.03em",
             }}
           >
             MJ

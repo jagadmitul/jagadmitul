@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Fraunces, JetBrains_Mono } from "next/font/google";
+import { Instrument_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { NO_FLASH_SCRIPT, PaletteProvider } from "@/lib/palette";
 import { LenisProvider } from "@/lib/lenis";
@@ -8,17 +8,23 @@ import { Background3D } from "@/components/visual/Background3D";
 import { CustomCursor } from "@/components/visual/CustomCursor";
 import { ScrollProgress } from "@/components/visual/ScrollProgress";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+// Instrument Sans — UI sans with subtle character. Designed by Instrument
+// for use with Instrument Serif. Distinctive without being loud, and
+// specifically NOT in the Inter/Geist/Manrope AI-default rotation.
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Instrument Serif — display + italic accents. Big personality in the
+// italic; paired with Instrument Sans by design.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
+  weight: ["400"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -54,7 +60,7 @@ export default function RootLayout({
       lang="en"
       data-palette="default"
       suppressHydrationWarning
-      className={`${bricolage.variable} ${fraunces.variable} ${jetbrains.variable}`}
+      className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrains.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />

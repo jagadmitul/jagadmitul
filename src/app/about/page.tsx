@@ -85,13 +85,12 @@ export default function AboutPage() {
                 aria-hidden="true"
                 className="absolute top-3 right-4 font-display select-none pointer-events-none"
                 style={{
-                  fontFamily: "var(--font-fraunces), Georgia, serif",
                   fontStyle: "italic",
-                  fontWeight: 700,
-                  fontSize: "5rem",
+                  fontWeight: 400,
+                  fontSize: "6rem",
                   lineHeight: 1,
                   color: "var(--primary)",
-                  opacity: 0.18,
+                  opacity: 0.22,
                 }}
               >
                 &ldquo;
