@@ -432,27 +432,6 @@ html.lenis body {
   }
 }
 
-/* Initial app fade-in. Pure CSS so it runs on first paint with no
-   JS-hydration delay — gives the site a smooth boot rather than a hard
-   flash. Body starts at opacity 0 and animates to 1 over ~480ms. The
-   PageTransition wrapper handles per-route changes; this handles the
-   first arrival on any URL. */
-@keyframes app-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.app-fade-in {
-  animation: app-fade-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .app-fade-in {
-    animation: none !important;
-  }
-}
 
 /* Custom scrollbar — preserves existing portfolio look */
 ::-webkit-scrollbar {

@@ -7,8 +7,6 @@ import { AskMitul } from "@/components/chrome/AskMitul";
 import { Background3D } from "@/components/visual/Background3D";
 import { CustomCursor } from "@/components/visual/CustomCursor";
 import { ScrollProgress } from "@/components/visual/ScrollProgress";
-import { PageTransition } from "@/components/motion/PageTransition";
-import { RouteCurtain } from "@/components/motion/RouteCurtain";
 
 // Instrument Sans — UI sans with subtle character. Designed by Instrument
 // for use with Instrument Serif. Distinctive without being loud, and
@@ -67,14 +65,13 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />
       </head>
-      <body className="bg-paper text-ink min-h-screen app-fade-in">
+      <body className="bg-paper text-ink min-h-screen">
         <PaletteProvider>
           <LenisProvider>
             <Background3D />
             <ScrollProgress />
             <CustomCursor />
-            <PageTransition>{children}</PageTransition>
-            <RouteCurtain />
+            {children}
             <AskMitul />
           </LenisProvider>
         </PaletteProvider>
