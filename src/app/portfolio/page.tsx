@@ -40,7 +40,6 @@ export default function PortfolioPage() {
                 <Link
                   key={project.id}
                   href={`/portfolio/${project.slug}`}
-                  data-cursor-label="OPEN"
                   className="group block rounded-2xl bg-paper p-4 lg:p-6 hover:shadow-card transition"
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">

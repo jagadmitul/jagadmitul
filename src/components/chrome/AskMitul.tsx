@@ -16,7 +16,7 @@ type Turn =
 const INTRO: Turn = {
   kind: "intro",
   id: "intro",
-  text: "Hey — this is a scripted Mitul, not the real one. Pick a question or type your own. I'll route to the closest answer; if I don't have one, I'll nudge you to email me directly.",
+  text: "Hey 👋 Pick a question below or type your own. For anything more specific, drop me an email and I'll personally reply within 24 hours.",
 };
 
 let turnId = 0;
@@ -118,8 +118,9 @@ export function AskMitul() {
                   <Dialog.Title className="text-base font-semibold text-ink leading-tight">
                     Ask Mitul
                   </Dialog.Title>
-                  <span className="text-[0.65rem] font-mono uppercase tracking-[0.14em] text-ink-mute mt-0.5">
-                    scripted, not generative
+                  <span className="inline-flex items-center gap-1.5 text-[0.65rem] font-mono uppercase tracking-[0.14em] text-ink-mute mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    Online · replies quickly
                   </span>
                 </div>
               </div>

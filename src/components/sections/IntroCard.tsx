@@ -92,7 +92,6 @@ export function IntroCard() {
         <button
           type="button"
           onClick={copyEmail}
-          data-cursor-label={copied ? "COPIED" : "COPY"}
           className="inline-flex items-center gap-2 rounded-lg border border-hairline bg-transparent px-4 py-3 text-sm font-medium text-ink hover:bg-paper transition"
           aria-label="Copy email address"
         >
