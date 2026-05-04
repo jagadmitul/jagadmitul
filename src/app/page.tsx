@@ -57,11 +57,12 @@ export default function Home() {
           </TiltCard>
         </ScrollReveal>
 
-        {/* Bottom CTA row */}
-        <ScrollReveal className="lg:col-span-2" delay={0.05}>
+        {/* Bottom CTA row — both wrappers stretch to row height so CtaMarquee
+            doesn't bottom-out short next to the taller ServicesCard. */}
+        <ScrollReveal className="lg:col-span-2 h-full" delay={0.05}>
           <ServicesCard limit={6} />
         </ScrollReveal>
-        <ScrollReveal delay={0.1}>
+        <ScrollReveal className="h-full" delay={0.1}>
           <CtaMarquee />
         </ScrollReveal>
       </main>
