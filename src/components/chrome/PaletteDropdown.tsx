@@ -69,7 +69,7 @@ export function PaletteDropdown() {
               <DropdownMenu.Item
                 key={p}
                 onSelect={() => setPalette(p)}
-                className={`flex items-center gap-3 px-2 py-2 rounded-lg text-sm outline-none cursor-pointer transition ${
+                className={`flex items-center gap-3 px-2 py-2 mt-1 first:mt-0 rounded-lg text-sm outline-none cursor-pointer transition ${
                   active
                     ? "bg-primary/15 text-primary ring-1 ring-primary/25"
                     : "text-ink hover:bg-primary/10 data-[highlighted]:bg-primary/10"
