@@ -3,19 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Animated editorial line-art portrait — replaces the static "MJ" monogram
- * in the IntroCard. Built as one continuous SVG of strokes (hair, face,
- * eyes, beard, collar) all using `var(--primary)`, so it adapts to every
- * theme. Lifecycle:
- *   1. On mount the strokes draw on (stroke-dasharray reveal, ~1.6s)
- *   2. Continuous: subtle breathing (group scale 1 → 1.008 → 1, 5s loop)
- *   3. Continuous: hair strands sway via group rotate
- *   4. Pupils track the cursor (clamped to ±3px) — the portrait "looks at"
- *      the visitor as they move around the page
- *   5. Eyes blink every 4–7s (random) via a sliding eyelid mask
+ * Animated editorial line-art portrait.
  *
- * Pure SVG, no canvas. Reduced-motion: skips the breathing/sway/blink and
- * just draws the static portrait.
+ * Performance notes (re-tuned 2026-05-04 after lag report):
+ *   - NO requestAnimationFrame loop. The previous version polled per-frame
+ *     and called getBoundingClientRect() on every tick, which forces layout
+ *     and burned CPU even when the mouse wasn't moving. Now pupil tracking
+ *     is driven by `mousemove` directly with a cached bounding rect (only
+ *     re-measured on resize/scroll), so it costs ~zero when idle.
+ *   - IntersectionObserver pauses the breathing animation and stops
+ *     listening to mousemove when the portrait is off-screen.
+ *   - Hair-sway dropped — barely visible, costs a constant transform
+ *     composite. Only breathing remains, softer (1.006) and slower (7s).
+ *   - Eyelid blink uses a single setTimeout chain, no rAF.
+ *   - Pupils animate via CSS `transform: translate3d` (composited) rather
+ *     than setAttribute("cx") (would re-paint).
  */
 export function EditorialPortrait() {
   const wrapRef = useRef<SVGSVGElement | null>(null);
@@ -24,94 +26,110 @@ export function EditorialPortrait() {
   const pupilLeftRef = useRef<SVGCircleElement | null>(null);
   const pupilRightRef = useRef<SVGCircleElement | null>(null);
   const [drawn, setDrawn] = useState(false);
+  const [visible, setVisible] = useState(true);
 
-  // Trigger the draw-on animation after first paint
   useEffect(() => {
     const id = window.setTimeout(() => setDrawn(true), 60);
     return () => window.clearTimeout(id);
   }, []);
 
-  // Pupil tracking + blinking
+  // Pause everything when off-screen
   useEffect(() => {
+    if (!wrapRef.current) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) setVisible(e.isIntersecting);
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(wrapRef.current);
+    return () => io.disconnect();
+  }, []);
+
+  // Pupil tracking — event-driven, not rAF. Caches the SVG rect and only
+  // re-measures on resize/scroll. When the portrait is off-screen the
+  // listener detaches entirely.
+  useEffect(() => {
+    if (!visible) return;
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (reduced) return;
 
-    let raf = 0;
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+    let rect: DOMRect | null = null;
+    const measure = () => {
+      rect = wrapRef.current?.getBoundingClientRect() ?? null;
+    };
+    measure();
 
     const onMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      if (!rect) return;
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.hypot(dx, dy) || 1;
+      const off = Math.min(3.5, dist / 80);
+      const ox = (dx / dist) * off;
+      const oy = (dy / dist) * off;
+      const t = `translate3d(${ox}px, ${oy}px, 0)`;
+      if (pupilLeftRef.current) pupilLeftRef.current.style.transform = t;
+      if (pupilRightRef.current) pupilRightRef.current.style.transform = t;
     };
 
-    const tick = () => {
-      const svg = wrapRef.current;
-      if (svg) {
-        const rect = svg.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = mouseX - cx;
-        const dy = mouseY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const off = Math.min(3.5, dist / 80);
-        const ox = (dx / dist) * off;
-        const oy = (dy / dist) * off;
-        if (pupilLeftRef.current) {
-          pupilLeftRef.current.setAttribute("cx", String(255 + ox));
-          pupilLeftRef.current.setAttribute("cy", String(175 + oy));
-        }
-        if (pupilRightRef.current) {
-          pupilRightRef.current.setAttribute("cx", String(345 + ox));
-          pupilRightRef.current.setAttribute("cy", String(175 + oy));
-        }
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
-    // Random blink
-    let blinkTimer = 0;
-    const scheduleBlink = () => {
-      const delay = 3000 + Math.random() * 4000;
-      blinkTimer = window.setTimeout(() => {
-        const lids = [lidLeftRef.current, lidRightRef.current];
-        lids.forEach((lid) => {
-          if (!lid) return;
-          lid.style.transition = "transform 90ms ease-in";
-          lid.style.transform = "scaleY(1)";
-          window.setTimeout(() => {
-            lid.style.transition = "transform 130ms ease-out";
-            lid.style.transform = "scaleY(0)";
-          }, 110);
-        });
-        scheduleBlink();
-      }, delay);
-    };
-    scheduleBlink();
-
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
     return () => {
       window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-      window.clearTimeout(blinkTimer);
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
     };
-  }, []);
+  }, [visible]);
 
-  // CSS class string for any path that should draw-on on mount.
+  // Blink — random 4-7s interval, runs only while visible
+  useEffect(() => {
+    if (!visible) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduced) return;
+
+    let timer = 0;
+    const blink = () => {
+      const lids = [lidLeftRef.current, lidRightRef.current];
+      lids.forEach((lid) => {
+        if (!lid) return;
+        lid.style.transition = "transform 90ms ease-in";
+        lid.style.transform = "scaleY(1)";
+        window.setTimeout(() => {
+          if (!lid) return;
+          lid.style.transition = "transform 130ms ease-out";
+          lid.style.transform = "scaleY(0)";
+        }, 110);
+      });
+    };
+    const schedule = () => {
+      const delay = 4000 + Math.random() * 3000;
+      timer = window.setTimeout(() => {
+        blink();
+        schedule();
+      }, delay);
+    };
+    schedule();
+    return () => window.clearTimeout(timer);
+  }, [visible]);
+
   const drawCls = `portrait-stroke ${drawn ? "portrait-stroke-drawn" : ""}`;
 
   return (
     <svg
       ref={wrapRef}
       viewBox="0 0 600 400"
-      className="absolute inset-0 w-full h-full portrait-breathing"
+      className={`absolute inset-0 w-full h-full ${visible ? "portrait-breathing" : ""}`}
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
-        {/* Eyelid clip — used to mask blinking */}
         <clipPath id="eye-left-clip">
           <ellipse cx="255" cy="175" rx="14" ry="8" />
         </clipPath>
@@ -126,8 +144,8 @@ export function EditorialPortrait() {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {/* HAIR — gently swaying group */}
-        <g className="portrait-hair-sway">
+        {/* HAIR — static now, no sway. Sway burned a constant transform composite. */}
+        <g>
           <path
             className={drawCls}
             d="M 195 100
@@ -148,7 +166,6 @@ export function EditorialPortrait() {
           />
         </g>
 
-        {/* FACE oval */}
         <path
           className={drawCls}
           d="M 200 165
@@ -174,9 +191,8 @@ export function EditorialPortrait() {
             r="3"
             fill="var(--primary)"
             stroke="none"
-            style={{ transition: "cx 80ms ease, cy 80ms ease" }}
+            style={{ willChange: "transform" }}
           />
-          {/* eyelid — scales down to invisible at rest, scales up to blink */}
           <rect
             ref={lidLeftRef}
             x="241"
@@ -210,7 +226,7 @@ export function EditorialPortrait() {
             r="3"
             fill="var(--primary)"
             stroke="none"
-            style={{ transition: "cx 80ms ease, cy 80ms ease" }}
+            style={{ willChange: "transform" }}
           />
           <rect
             ref={lidRightRef}
@@ -228,7 +244,6 @@ export function EditorialPortrait() {
           />
         </g>
 
-        {/* EYEBROWS */}
         <path
           className={drawCls}
           d="M 240 158 Q 255 152, 270 158"
@@ -239,30 +254,22 @@ export function EditorialPortrait() {
           d="M 330 158 Q 345 152, 360 158"
           strokeWidth="2.2"
         />
-
-        {/* NOSE */}
         <path
           className={drawCls}
           d="M 300 185 L 295 215 Q 300 222, 308 218"
           strokeWidth="1.8"
         />
-
-        {/* MOUTH */}
         <path
           className={drawCls}
           d="M 275 240 Q 300 252, 325 240"
           strokeWidth="2"
         />
-
-        {/* BEARD hint */}
         <path
           className={drawCls}
           d="M 240 240 C 250 270, 280 285, 300 285 C 320 285, 350 270, 360 240"
           strokeWidth="1.4"
           opacity="0.7"
         />
-
-        {/* COLLAR + SHIRT */}
         <path
           className={drawCls}
           d="M 200 320 L 260 290 L 300 310 L 340 290 L 400 320 L 420 380 L 180 380 Z"

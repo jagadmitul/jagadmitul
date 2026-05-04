@@ -396,40 +396,26 @@ html.lenis body {
   stroke-dashoffset: 0;
 }
 
-/* Subtle breathing — the whole portrait gently inflates and relaxes on
-   a slow 5s loop. Disabled under reduced-motion. */
+/* Subtle breathing — softer (1.006) and slower (8s) than the v1, so the
+   compositor work between frames is smaller. Class is removed entirely
+   when the portrait scrolls off-screen (IntersectionObserver in
+   EditorialPortrait), so the animation stops paying its compositor cost. */
 @keyframes portrait-breathing {
   0%, 100% {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.012);
+    transform: scale(1.006);
   }
 }
 .portrait-breathing {
   transform-origin: 50% 60%;
-  animation: portrait-breathing 5s ease-in-out infinite;
+  animation: portrait-breathing 8s ease-in-out infinite;
+  will-change: transform;
 }
 
-/* Hair sway — rotates the hair-strands group ~1.5° back and forth on a
-   3.4s cycle. Pivot is at the crown so the swing reads as natural. */
-@keyframes portrait-hair-sway {
-  0%, 100% {
-    transform: rotate(-0.6deg);
-  }
-  50% {
-    transform: rotate(0.8deg);
-  }
-}
-.portrait-hair-sway {
-  transform-origin: 300px 70px;
-  animation: portrait-hair-sway 3.4s ease-in-out infinite;
-}
-
-/* Honour reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .portrait-breathing,
-  .portrait-hair-sway {
+  .portrait-breathing {
     animation: none !important;
   }
   .portrait-stroke {

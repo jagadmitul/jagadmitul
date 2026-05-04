@@ -26,10 +26,10 @@ function useMediaQuery(query: string): boolean {
 
 type Ripple = { id: number; x: number; y: number };
 
-// Number of trailing droplets behind the head. Each one lerps slower than the
-// previous, so they string out into a tail. Wrapped in an SVG goo filter so
-// they visually merge into one liquid ribbon that pinches and stretches.
-const TRAIL_COUNT = 6;
+// Number of trailing droplets behind the head. Reduced from 6 → 4 after
+// perf review — each droplet is a node the SVG goo filter blurs + merges,
+// and the filter cost is roughly linear in droplet count.
+const TRAIL_COUNT = 4;
 
 /**
  * Liquid mercury cursor. A head droplet leads, six trailing droplets fall
@@ -63,30 +63,35 @@ export function CustomCursor() {
     if (reduced || isTouch) return;
 
     let raf = 0;
+    let running = false;
     let mouseX = -200;
     let mouseY = -200;
 
-    // Each trail node has its own (x, y) and lerp factor. Index 0 is the head.
     const nodes = Array.from({ length: TRAIL_COUNT + 1 }, (_, i) => ({
       x: -200,
       y: -200,
-      // Head is fastest; trail droplets get progressively slower so they
-      // string out into a curved tail.
       lerp: 0.32 - i * 0.035,
     }));
 
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      // Wake the rAF loop on movement. Once everything is settled the
+      // loop pauses itself; this restarts it.
+      if (!running) {
+        running = true;
+        raf = requestAnimationFrame(tick);
+      }
     };
 
     const tick = () => {
       const isHover = hoveredRef.current;
       const hasLabel = !!labelStrRef.current;
-
-      // When hovered, trail droplets pull tight against the head so the
-      // cursor reads as a single solid pill — not a blurry trail.
       const tightening = isHover ? 0.55 : 0;
+
+      // Track the largest delta this frame — if every node is essentially
+      // settled (delta < 0.15px), we pause the loop until the next mousemove.
+      let maxDelta = 0;
 
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
@@ -98,21 +103,22 @@ export function CustomCursor() {
                 y: nodes[i - 1].y,
               };
         const lerp = Math.min(1, n.lerp + tightening);
-        n.x += (target.x - n.x) * lerp;
-        n.y += (target.y - n.y) * lerp;
+        const ndx = (target.x - n.x) * lerp;
+        const ndy = (target.y - n.y) * lerp;
+        n.x += ndx;
+        n.y += ndy;
+        const d = Math.abs(ndx) + Math.abs(ndy);
+        if (d > maxDelta) maxDelta = d;
 
         const el = i === 0 ? headRef.current : trailRefs.current[i - 1];
         if (!el) continue;
 
-        // Head sizes — larger on hover; on labelled hover it elongates
-        // sideways to host the pill text.
         let w: number;
         let h: number;
         if (i === 0) {
           w = isHover ? (hasLabel ? 64 : 40) : 22;
           h = isHover ? 40 : 22;
         } else {
-          // Droplets shrink the further down the tail they are
           const t = 1 - i / (TRAIL_COUNT + 1.4);
           const s = 18 * t;
           w = isHover ? s * 0.55 : s;
@@ -123,14 +129,26 @@ export function CustomCursor() {
         el.style.transform = `translate3d(${n.x - w / 2}px, ${n.y - h / 2}px, 0)`;
       }
 
-      // Label sits to the right of the head (outside the goo wrapper so
-      // the text isn't blurred). Tracks the head node, not the mouse.
       if (labelRef.current) {
         const head = nodes[0];
         labelRef.current.style.transform = `translate3d(${head.x + 22}px, ${head.y - 14}px, 0)`;
       }
 
+      // Idle gate — pause the loop when the cursor has fully caught up.
+      // Hover state changes also wake the loop via the deps array on the
+      // outer effect (it tears down + re-runs).
+      if (maxDelta < 0.15) {
+        running = false;
+        return;
+      }
       raf = requestAnimationFrame(tick);
+    };
+
+    const wake = () => {
+      if (!running) {
+        running = true;
+        raf = requestAnimationFrame(tick);
+      }
     };
 
     const onOver = (e: MouseEvent) => {
@@ -142,11 +160,25 @@ export function CustomCursor() {
       setHovered(!!interactive);
       const labelEl = t.closest<HTMLElement>("[data-cursor-label]");
       setLabel(labelEl?.dataset.cursorLabel ?? null);
+      // Wake the loop so the size transition stays centred over the next
+      // ~280ms while CSS transitions the width/height.
+      wake();
+      // Keep ticking for the duration of the size transition (~280ms +
+      // settle), since maxDelta could be < 0.15 even mid-transition.
+      const stopAt = performance.now() + 360;
+      const keepAlive = () => {
+        if (performance.now() < stopAt) {
+          wake();
+          window.setTimeout(keepAlive, 50);
+        }
+      };
+      keepAlive();
     };
 
     const onLeave = () => {
       setHovered(false);
       setLabel(null);
+      wake();
     };
 
     const onClick = (e: MouseEvent) => {
@@ -194,18 +226,20 @@ export function CustomCursor() {
         }}
       >
         <defs>
+          {/* Smaller stdDeviation (was 6, now 4) — Gaussian blur is the
+              filter's hot path and cost scales with the kernel size. The
+              feComposite stage is dropped because the alpha threshold
+              already gives crisp edges; one less filter pass per frame. */}
           <filter id="cursor-goo">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
             <feColorMatrix
               in="blur"
               mode="matrix"
               values="1 0 0 0 0
                       0 1 0 0 0
                       0 0 1 0 0
-                      0 0 0 20 -10"
-              result="goo"
+                      0 0 0 18 -9"
             />
-            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
           </filter>
         </defs>
       </svg>
