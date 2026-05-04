@@ -30,27 +30,27 @@ export function AskMitul() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const endRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll using a sentinel element + scrollIntoView. Fires on every
-  // new turn (including typing indicator) AND uses ResizeObserver so any
-  // post-animation height growth (Framer spring settling) ALSO triggers
-  // a scroll-down. This is the most robust pattern for animated chat UIs.
+  // Auto-scroll using a sentinel element. Only runs while the dialog is
+  // OPEN — Radix renders Dialog.Content into a Portal even when closed,
+  // so calling scrollIntoView() on the sentinel was nudging the WINDOW
+  // (causing the visible page to scroll slightly on every refresh). Now
+  // gated on `open`, and we use scrollTop directly on the chat scroller
+  // instead of scrollIntoView (which can affect ancestor scrollers when
+  // the chat is fixed/positioned weirdly).
   useEffect(() => {
-    const end = endRef.current;
+    if (!open) return;
     const scroller = scrollRef.current;
-    if (!end || !scroller) return;
+    if (!scroller) return;
 
     const scrollDown = () => {
-      end.scrollIntoView({ behavior: "smooth", block: "end" });
+      scroller.scrollTop = scroller.scrollHeight;
     };
 
-    // Immediate + post-paint + post-spring-settle
     scrollDown();
     requestAnimationFrame(scrollDown);
     const t1 = setTimeout(scrollDown, 250);
     const t2 = setTimeout(scrollDown, 600);
 
-    // Watch for any future content height changes (image loads, late
-    // animations) and re-scroll
     const observer = new ResizeObserver(() => scrollDown());
     observer.observe(scroller);
     if (scroller.firstElementChild) {
@@ -62,7 +62,7 @@ export function AskMitul() {
       clearTimeout(t2);
       observer.disconnect();
     };
-  }, [turns]);
+  }, [turns, open]);
 
   function dispatchAnswer(promptText: string, answerText: string) {
     const userTurn: Turn = { kind: "user", id: nextId(), text: promptText };
@@ -239,7 +239,11 @@ export function AskMitul() {
                       exit={reduced ? undefined : { opacity: 0, scale: 0.96 }}
                       transition={baseTransition}
                       onAnimationComplete={() => {
-                        endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+                        // Same reason as the effect above — scroll the chat
+                        // body's scrollTop directly instead of scrollIntoView,
+                        // which can nudge the parent window.
+                        const s = scrollRef.current;
+                        if (s) s.scrollTop = s.scrollHeight;
                       }}
                       className="flex justify-start"
                     >
