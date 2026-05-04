@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { useReducedMotion } from "@/lib/reduced-motion";
 
 function subscribeMql(query: string) {
@@ -21,15 +26,21 @@ function useMediaQuery(query: string): boolean {
 
 type Ripple = { id: number; x: number; y: number };
 
+// Number of trailing droplets behind the head. Each one lerps slower than the
+// previous, so they string out into a tail. Wrapped in an SVG goo filter so
+// they visually merge into one liquid ribbon that pinches and stretches.
+const TRAIL_COUNT = 6;
+
 /**
- * Morphing primary "ink" cursor:
- *   - Soft semi-transparent primary blob that lags + smooths on movement
- *   - Squashes and rotates in the direction of motion (velocity-aware)
- *   - Morphs into a labeled pill on `data-cursor-label` elements
- *   - Sprouts an expanding ring ripple on every click
- *   - A tiny crisp dot at the actual pointer position so accuracy is kept
+ * Liquid mercury cursor. A head droplet leads, six trailing droplets fall
+ * progressively further behind, all wrapped in an SVG `feGaussianBlur` +
+ * `feColorMatrix` "goo" filter so they merge into one flowing blob that
+ * pinches and stretches with motion. On hover over interactive elements
+ * the trail collapses into the head and (if the element has
+ * `data-cursor-label`) a label pill peels out beside it. Click emits an
+ * expanding ring ripple.
  *
- * Disabled on touch and under prefers-reduced-motion.
+ * Disabled on touch and under `prefers-reduced-motion`.
  */
 export function CustomCursor() {
   const reduced = useReducedMotion();
@@ -38,15 +49,15 @@ export function CustomCursor() {
   const [label, setLabel] = useState<string | null>(null);
   const [ripples, setRipples] = useState<Ripple[]>([]);
 
-  const blobRef = useRef<HTMLDivElement | null>(null);
-  const dotRef = useRef<HTMLDivElement | null>(null);
+  const headRef = useRef<HTMLDivElement | null>(null);
+  const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const labelRef = useRef<HTMLDivElement | null>(null);
   const rippleId = useRef(0);
 
-  // Latest values readable inside the rAF loop without re-running the effect.
   const hoveredRef = useRef(false);
-  const labelRef = useRef<string | null>(null);
+  const labelStrRef = useRef<string | null>(null);
   hoveredRef.current = hovered;
-  labelRef.current = label;
+  labelStrRef.current = label;
 
   useEffect(() => {
     if (reduced || isTouch) return;
@@ -54,45 +65,71 @@ export function CustomCursor() {
     let raf = 0;
     let mouseX = -200;
     let mouseY = -200;
-    let blobX = -200;
-    let blobY = -200;
-    let prevBlobX = -200;
-    let prevBlobY = -200;
+
+    // Each trail node has its own (x, y) and lerp factor. Index 0 is the head.
+    const nodes = Array.from({ length: TRAIL_COUNT + 1 }, (_, i) => ({
+      x: -200,
+      y: -200,
+      // Head is fastest; trail droplets get progressively slower so they
+      // string out into a curved tail.
+      lerp: 0.32 - i * 0.035,
+    }));
 
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${mouseX - 3}px, ${mouseY - 3}px, 0)`;
-      }
     };
 
     const tick = () => {
-      blobX += (mouseX - blobX) * 0.16;
-      blobY += (mouseY - blobY) * 0.16;
+      const isHover = hoveredRef.current;
+      const hasLabel = !!labelStrRef.current;
 
-      const dx = blobX - prevBlobX;
-      const dy = blobY - prevBlobY;
-      const speed = Math.min(Math.sqrt(dx * dx + dy * dy), 50);
-      const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      // When hovered, trail droplets pull tight against the head so the
+      // cursor reads as a single solid pill — not a blurry trail.
+      const tightening = isHover ? 0.55 : 0;
 
-      const stretch = 1 + Math.min(speed / 65, 0.55);
-      const squash = 1 - Math.min(speed / 130, 0.22);
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const target =
+          i === 0
+            ? { x: mouseX, y: mouseY }
+            : {
+                x: nodes[i - 1].x,
+                y: nodes[i - 1].y,
+              };
+        const lerp = Math.min(1, n.lerp + tightening);
+        n.x += (target.x - n.x) * lerp;
+        n.y += (target.y - n.y) * lerp;
 
-      if (blobRef.current) {
-        const isHover = hoveredRef.current;
-        const hasLabel = !!labelRef.current;
-        const w = isHover ? (hasLabel ? 110 : 48) : 28;
-        const h = isHover ? (hasLabel ? 38 : 48) : 28;
-        const baseTranslate = `translate3d(${blobX - w / 2}px, ${blobY - h / 2}px, 0)`;
-        const motion = isHover
-          ? ""
-          : ` rotate(${angle}deg) scale(${stretch}, ${squash})`;
-        blobRef.current.style.transform = baseTranslate + motion;
+        const el = i === 0 ? headRef.current : trailRefs.current[i - 1];
+        if (!el) continue;
+
+        // Head sizes — larger on hover; on labelled hover it elongates
+        // sideways to host the pill text.
+        let w: number;
+        let h: number;
+        if (i === 0) {
+          w = isHover ? (hasLabel ? 64 : 40) : 22;
+          h = isHover ? 40 : 22;
+        } else {
+          // Droplets shrink the further down the tail they are
+          const t = 1 - i / (TRAIL_COUNT + 1.4);
+          const s = 18 * t;
+          w = isHover ? s * 0.55 : s;
+          h = w;
+        }
+        el.style.width = `${w}px`;
+        el.style.height = `${h}px`;
+        el.style.transform = `translate3d(${n.x - w / 2}px, ${n.y - h / 2}px, 0)`;
       }
 
-      prevBlobX = blobX;
-      prevBlobY = blobY;
+      // Label sits to the right of the head (outside the goo wrapper so
+      // the text isn't blurred). Tracks the head node, not the mouse.
+      if (labelRef.current) {
+        const head = nodes[0];
+        labelRef.current.style.transform = `translate3d(${head.x + 22}px, ${head.y - 14}px, 0)`;
+      }
+
       raf = requestAnimationFrame(tick);
     };
 
@@ -141,56 +178,93 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* Soft morphing blob — semi-transparent primary fill, no border. */}
-      <div
-        ref={blobRef}
+      {/* SVG filter defs — fixed-position 0×0 svg so it doesn't take layout
+          space. The gooey filter blurs all children of `.cursor-goo` and then
+          stamps a hard alpha threshold so anything close enough merges into
+          one liquid blob. */}
+      <svg
         aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 z-[9999]"
+        width={0}
+        height={0}
         style={{
-          width: hovered ? (label ? 110 : 48) : 28,
-          height: hovered ? (label ? 38 : 48) : 28,
-          borderRadius: hovered && label ? 999 : "50%",
-          backgroundColor: hovered
-            ? "var(--primary)"
-            : "color-mix(in srgb, var(--primary) 32%, transparent)",
-          backdropFilter: hovered ? "none" : "blur(2px)",
-          boxShadow: hovered
-            ? "0 8px 24px -6px color-mix(in srgb, var(--primary) 55%, transparent)"
-            : "0 0 18px 2px color-mix(in srgb, var(--primary) 22%, transparent)",
-          transition:
-            "width 280ms cubic-bezier(0.34,1.56,0.64,1), height 280ms cubic-bezier(0.34,1.56,0.64,1), border-radius 240ms cubic-bezier(0.22,1,0.36,1), background-color 220ms ease, box-shadow 220ms ease",
-          willChange: "transform, width, height, border-radius",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          pointerEvents: "none",
         }}
       >
-        {label && (
+        <defs>
+          <filter id="cursor-goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0
+                      0 1 0 0 0
+                      0 0 1 0 0
+                      0 0 0 20 -10"
+              result="goo"
+            />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* Goo wrapper — full-viewport, non-interactive. Holds head + trail
+          droplets so the SVG filter can merge them. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[9999]"
+        style={{
+          filter: "url(#cursor-goo)",
+        }}
+      >
+        {/* Head droplet — solid primary fill */}
+        <div
+          ref={headRef}
+          className="absolute top-0 left-0 rounded-full"
+          style={{
+            backgroundColor: "var(--primary)",
+            transition:
+              "width 260ms cubic-bezier(0.34,1.56,0.64,1), height 260ms cubic-bezier(0.34,1.56,0.64,1)",
+            willChange: "transform, width, height",
+          }}
+        />
+        {/* Trail droplets — same primary fill, gooey filter merges them
+            into the head so they read as one liquid ribbon */}
+        {Array.from({ length: TRAIL_COUNT }).map((_, i) => (
+          <div
+            key={i}
+            ref={(el) => {
+              trailRefs.current[i] = el;
+            }}
+            className="absolute top-0 left-0 rounded-full"
+            style={{
+              backgroundColor: "var(--primary)",
+              willChange: "transform, width, height",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Label pill — sits outside the goo wrapper so text is sharp.
+          Position is updated per-frame in the rAF loop. */}
+      <div
+        ref={labelRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed top-0 left-0 z-[10000]"
+        style={{ willChange: "transform" }}
+      >
+        {label && hovered && (
           <span
-            className="absolute inset-0 grid place-items-center px-3 text-[0.62rem] font-mono uppercase tracking-[0.16em] text-[color:var(--primary-ink)] whitespace-nowrap"
-            style={{ pointerEvents: "none" }}
+            className="inline-block rounded-full bg-[color:var(--primary)] px-3 py-1 text-[0.62rem] font-mono uppercase tracking-[0.16em] text-[color:var(--primary-ink)] whitespace-nowrap shadow-lg cursor-label-in"
           >
             {label}
           </span>
         )}
       </div>
 
-      {/* Crisp accuracy dot at exact pointer (hides on hover) */}
-      <div
-        ref={dotRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 z-[9999]"
-        style={{
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          backgroundColor: "var(--primary)",
-          opacity: hovered ? 0 : 0.9,
-          transition: "opacity 160ms ease",
-          willChange: "transform",
-        }}
-      />
-
-      {/* Click ripples — outer span handles translate, inner span animates
-          the scale via keyframes. Keeping them on separate elements means the
-          transform from translate doesn't get clobbered by the scale animation. */}
+      {/* Click ripples */}
       {ripples.map((r) => (
         <span
           key={r.id}
