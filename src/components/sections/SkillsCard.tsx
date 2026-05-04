@@ -35,7 +35,7 @@ export function SkillsCard() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2 flex-1 content-center">
         {EXPERT_TILES.map((tool) => (
           <div
             key={tool.name}

@@ -43,7 +43,7 @@ export function StatsCard() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-hairline bg-hairline">
+      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-hairline bg-hairline flex-1 min-h-[12rem]">
         {STATS.map((s) => (
           <div
             key={s.label}
