@@ -95,7 +95,9 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* Outer ring — eased follower */}
+      {/* Outer ring — eased follower. Solid primary fill on hover (no
+          mix-blend-mode — that made the label invisible in dark mode).
+          Border-only at rest, solid pill with white text when labeled. */}
       <div
         ref={ringRef}
         aria-hidden="true"
@@ -105,20 +107,21 @@ export function CustomCursor() {
           height: 36,
           borderRadius: "50%",
           border: `1.5px solid var(--primary)`,
+          backgroundColor: "transparent",
           transition:
-            "width 220ms cubic-bezier(0.22,1,0.36,1), height 220ms cubic-bezier(0.22,1,0.36,1), background-color 200ms, border-radius 220ms",
+            "width 220ms cubic-bezier(0.22,1,0.36,1), height 220ms cubic-bezier(0.22,1,0.36,1), background-color 200ms, border-radius 220ms, box-shadow 200ms",
           ...(hovered && {
             width: label ? 110 : 56,
             height: label ? 38 : 56,
             backgroundColor: "var(--primary)",
-            mixBlendMode: "multiply" as const,
-            borderRadius: label ? 12 : "50%",
+            borderRadius: label ? 999 : "50%",
+            boxShadow: "0 4px 14px 0 rgba(0,0,0,0.18)",
           }),
         }}
       >
         {label && (
           <span
-            className="absolute inset-0 grid place-items-center text-[0.62rem] font-mono uppercase tracking-wider text-primary-ink"
+            className="absolute inset-0 grid place-items-center text-[0.62rem] font-mono uppercase tracking-[0.16em] text-white"
             style={{ pointerEvents: "none" }}
           >
             {label}

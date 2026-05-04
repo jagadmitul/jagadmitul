@@ -30,6 +30,7 @@ export function ProjectsCard({ limit = 3 }: { limit?: number }) {
           <Link
             key={project.id}
             href={`/portfolio/${project.slug}`}
+            data-cursor-label="OPEN"
             className="group block rounded-xl bg-paper p-4 hover:shadow-card transition"
           >
             <div className="flex gap-4">

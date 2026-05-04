@@ -13,6 +13,7 @@ export function LatestArticleCard() {
   return (
     <Link
       href={`/blog/${latest.slug}`}
+      data-cursor-label="READ"
       className="group block rounded-2xl bg-paper-2/85 backdrop-blur-xl border border-hairline p-6 shadow-card hover:shadow-lg transition"
     >
       <div className="flex items-baseline justify-between mb-4">

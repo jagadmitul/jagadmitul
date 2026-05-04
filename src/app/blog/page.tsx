@@ -40,6 +40,7 @@ export default function BlogPage() {
                 <Link
                   key={article.id}
                   href={`/blog/${article.slug}`}
+                  data-cursor-label="READ"
                   className="group block rounded-2xl bg-paper overflow-hidden hover:shadow-card transition"
                 >
                   <GradientCover
