@@ -169,92 +169,62 @@ export function EditorialPortrait() {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {/* HAIR — modern swept-back undercut. Top has volume + textured
-            strands going up-and-back; sides taper short above the ears. */}
+        {/* HAIR — full, confident wavy quiff. Big silhouette on top with
+            real volume; covers the whole crown so it doesn't read as bald.
+            Wavy front, swept slightly to one side. */}
         <g>
-          {/* Main silhouette — flatter on sides, lifted on top */}
+          {/* Outer hair silhouette — bold sweeping curve from temple to temple */}
           <path
             className={drawCls}
-            d="M 200 145
-               C 198 110, 215 75, 250 60
-               C 285 48, 330 50, 360 70
-               C 385 86, 400 110, 405 140
-               C 408 162, 405 180, 398 195"
-            strokeWidth="2.6"
+            d="M 195 175
+               C 188 130, 200 80, 245 55
+               C 280 40, 320 38, 360 52
+               C 395 66, 412 105, 410 150
+               C 410 165, 408 180, 405 195"
+            strokeWidth="3"
           />
-          {/* Side fade — short above ear */}
+          {/* Wavy front — defines hair line on forehead */}
           <path
             className={drawCls}
-            d="M 200 150 C 198 165, 200 180, 205 195"
+            d="M 215 145
+               Q 240 130, 265 138
+               Q 290 148, 315 132
+               Q 345 120, 380 138
+               Q 400 148, 408 158"
             strokeWidth="2.2"
           />
+          {/* Volume — internal flow line giving the quiff height */}
           <path
             className={drawCls}
-            d="M 405 145 C 408 162, 405 180, 398 195"
-            strokeWidth="2.2"
-          />
-          {/* Volume strands — diagonal, swept back-and-up */}
-          <path
-            className={drawCls}
-            d="M 230 90 C 245 70, 280 60, 315 65"
-            strokeWidth="1.6"
-          />
-          <path
-            className={drawCls}
-            d="M 255 80 C 280 65, 320 60, 350 75"
-            strokeWidth="1.4"
-          />
-          <path
-            className={drawCls}
-            d="M 285 70 C 310 58, 345 60, 370 78"
-            strokeWidth="1.3"
-          />
-          {/* Hairline edge on forehead — subtle V */}
-          <path
-            className={drawCls}
-            d="M 235 130 Q 300 140, 365 130"
+            d="M 240 110 Q 280 80, 330 88 Q 370 96, 395 120"
             strokeWidth="1.6"
             opacity="0.7"
           />
+          <path
+            className={drawCls}
+            d="M 260 92 Q 300 70, 360 84"
+            strokeWidth="1.4"
+            opacity="0.55"
+          />
         </g>
 
-        {/* FACE — angular jaw, defined chin, faint 3/4 turn (slight right
-            asymmetry: right side carries more weight). NOT an oval. */}
+        {/* FACE — sharper V-jaw, narrower than v2. Defined chin point. */}
         <path
           className={drawCls}
-          d="M 205 195
-             C 205 235, 215 260, 235 280
-             C 255 295, 280 305, 300 305
-             C 320 305, 345 295, 365 280
-             C 385 260, 395 235, 395 195"
-          strokeWidth="2.6"
-        />
-        {/* Jaw shadow line — adds dimension, suggests cheekbone */}
-        <path
-          className={drawCls}
-          d="M 232 250 C 245 270, 270 285, 295 290"
-          strokeWidth="1.2"
-          opacity="0.45"
-        />
-        <path
-          className={drawCls}
-          d="M 368 250 C 355 270, 330 285, 305 290"
-          strokeWidth="1.2"
-          opacity="0.45"
+          d="M 200 195
+             C 200 235, 210 265, 232 290
+             C 252 308, 280 320, 300 320
+             C 320 320, 348 308, 368 290
+             C 390 265, 400 235, 400 195"
+          strokeWidth="2.8"
         />
 
-        {/* EYES — left (slight downward outer corner = confident, not surprised).
-            Smaller, more refined than v1. */}
+        {/* EYES — left (clean dash + pupil, no ellipse outline) */}
         <g>
           <path
             className={drawCls}
-            d="M 245 172 Q 258 167, 271 174"
-            strokeWidth="2"
-          />
-          <path
-            className={drawCls}
-            d="M 271 174 Q 258 178, 245 172"
-            strokeWidth="2"
+            d="M 244 174 Q 258 169, 272 174"
+            strokeWidth="2.4"
           />
           <circle
             ref={pupilLeftRef}
@@ -281,17 +251,12 @@ export function EditorialPortrait() {
           />
         </g>
 
-        {/* EYES — right (mirror) */}
+        {/* EYES — right */}
         <g>
           <path
             className={drawCls}
-            d="M 325 174 Q 338 168, 351 173"
-            strokeWidth="2"
-          />
-          <path
-            className={drawCls}
-            d="M 351 173 Q 338 178, 325 174"
-            strokeWidth="2"
+            d="M 324 174 Q 338 169, 352 174"
+            strokeWidth="2.4"
           />
           <circle
             ref={pupilRightRef}
@@ -318,123 +283,60 @@ export function EditorialPortrait() {
           />
         </g>
 
-        {/* EYEBROWS — strong, slight asymmetric raise on left for that
-            "interested / confident" tilt. */}
+        {/* EYEBROWS — bold, confident, both straight (no asymmetry — the
+            asymmetry from v2 read as confused, not confident) */}
         <path
           className={drawCls}
-          d="M 240 152 Q 258 144, 276 152"
-          strokeWidth="2.6"
+          d="M 240 154 L 274 152"
+          strokeWidth="3"
         />
         <path
           className={drawCls}
-          d="M 322 152 Q 338 146, 354 152"
-          strokeWidth="2.6"
-        />
-
-        {/* NOSE — bridge line + base + nostril hint. More anatomy than v1's
-            single L-shape. */}
-        <path
-          className={drawCls}
-          d="M 298 178 Q 296 200, 295 220"
-          strokeWidth="1.6"
-        />
-        <path
-          className={drawCls}
-          d="M 295 220 Q 298 226, 305 224 Q 312 226, 312 218"
-          strokeWidth="1.6"
+          d="M 322 152 L 356 154"
+          strokeWidth="3"
         />
 
-        {/* MOUTH — confident smirk: right corner subtly raised, line is
-            asymmetric. NOT a symmetric arc. */}
+        {/* NOSE — clean simple line. No nostril detail — was overdoing it. */}
         <path
           className={drawCls}
-          d="M 275 248 Q 295 256, 320 246 Q 326 245, 332 240"
-          strokeWidth="2"
-        />
-
-        {/* BEARD — well-groomed, defined edges (not a vague swoop) */}
-        <path
-          className={drawCls}
-          d="M 232 248
-             C 240 275, 260 290, 285 295
-             C 300 297, 315 296, 330 293
-             C 355 287, 372 270, 380 248"
-          strokeWidth="1.6"
-        />
-        {/* Beard fill texture — short vertical strokes for stubble feel */}
-        {Array.from({ length: 8 }).map((_, i) => {
-          const x = 256 + i * 12;
-          return (
-            <path
-              key={i}
-              className={drawCls}
-              d={`M ${x} ${265 + (i % 3) * 4} L ${x - 2} ${280 + (i % 3) * 3}`}
-              strokeWidth="0.9"
-              opacity="0.45"
-            />
-          );
-        })}
-
-        {/* SUIT — sharp peak lapels + open shirt collar. Reads as
-            business-ready, not "rumpled tee". The shoulders sit slightly
-            off-centre to suggest a 3/4-turn pose. */}
-        {/* Outer suit shoulders */}
-        <path
-          className={drawCls}
-          d="M 175 365 L 215 320 L 265 320"
-          strokeWidth="2.4"
-        />
-        <path
-          className={drawCls}
-          d="M 425 365 L 385 320 L 335 320"
-          strokeWidth="2.4"
-        />
-        {/* Sharp peak lapels — V shape from collar to mid-chest */}
-        <path
-          className={drawCls}
-          d="M 265 320 L 245 350 L 270 380"
-          strokeWidth="2.2"
-        />
-        <path
-          className={drawCls}
-          d="M 335 320 L 355 350 L 330 380"
-          strokeWidth="2.2"
-        />
-        {/* Inner shirt — open collar V */}
-        <path
-          className={drawCls}
-          d="M 270 380 L 300 358 L 330 380"
+          d="M 298 188 L 296 218 Q 298 224, 306 222"
           strokeWidth="1.8"
         />
-        {/* Tiny lapel notch detail */}
+
+        {/* MOUTH — calm confident smile, gentle upward curve */}
         <path
           className={drawCls}
-          d="M 247 348 L 255 343"
-          strokeWidth="1.2"
-          opacity="0.7"
-        />
-        <path
-          className={drawCls}
-          d="M 353 348 L 345 343"
-          strokeWidth="1.2"
-          opacity="0.7"
+          d="M 278 250 Q 300 256, 322 250"
+          strokeWidth="2.2"
         />
 
-        {/* Tiny "MJ" italic signature in the bottom-right corner — earned
-            mark, not splashed across the chest */}
-        <text
-          x="572"
-          y="392"
-          textAnchor="end"
-          fontFamily="var(--font-instrument-serif), Georgia, serif"
-          fontStyle="italic"
-          fontSize="14"
-          fill="var(--primary)"
-          opacity="0.45"
-          stroke="none"
-        >
-          MJ
-        </text>
+        {/* BEARD — clean defined edge, no stubble dots */}
+        <path
+          className={drawCls}
+          d="M 232 250
+             C 242 280, 268 305, 300 308
+             C 332 305, 358 280, 368 250"
+          strokeWidth="1.8"
+        />
+
+        {/* TURTLENECK / CREW — clean sweater silhouette, no fussy lapels.
+            Reads as 'creative-director / founder' rather than 'banker'. */}
+        <path
+          className={drawCls}
+          d="M 165 380
+             L 220 335
+             Q 260 320, 300 320
+             Q 340 320, 380 335
+             L 435 380"
+          strokeWidth="2.6"
+        />
+        {/* Subtle collar fold */}
+        <path
+          className={drawCls}
+          d="M 250 340 Q 300 348, 350 340"
+          strokeWidth="1.6"
+          opacity="0.7"
+        />
       </g>
     </svg>
   );
