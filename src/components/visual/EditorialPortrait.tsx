@@ -152,12 +152,12 @@ export function EditorialPortrait() {
           <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
         </radialGradient>
 
-        {/* Eyelid masks — used by the blink animation */}
+        {/* Eyelid masks — match the new almond-eye geometry */}
         <clipPath id="eye-left-clip">
-          <ellipse cx="252" cy="207" rx="11" ry="8" />
+          <path d="M 240 213 Q 256 205, 272 213 Q 256 222, 240 213 Z" />
         </clipPath>
         <clipPath id="eye-right-clip">
-          <ellipse cx="338" cy="207" rx="11" ry="8" />
+          <path d="M 328 213 Q 344 205, 360 213 Q 344 222, 328 213 Z" />
         </clipPath>
       </defs>
 
@@ -165,214 +165,187 @@ export function EditorialPortrait() {
       <ellipse
         cx="300"
         cy="200"
-        rx="240"
-        ry="200"
+        rx="260"
+        ry="220"
         fill="url(#portrait-spotlight)"
       />
 
-      {/* ─────────────── BLAZER (back-most, big shape) ─────────────── */}
+      {/* ─────────────── BLAZER ─────────────── */}
+      {/* Big shoulder shape that fills the bottom of the frame so the
+          subject doesn't look like a floating head. Shoulders go all the
+          way to the edges. */}
       <g>
-        {/* Outer blazer silhouette */}
         <path
-          d="M 100 460
-             L 100 415
-             C 130 380, 175 358, 210 350
-             L 240 345
+          d="M 0 460
+             L 0 410
+             C 60 365, 140 340, 215 333
+             L 250 340
              L 300 380
-             L 360 345
-             L 390 350
-             C 425 358, 470 380, 500 415
-             L 500 460 Z"
+             L 350 340
+             L 385 333
+             C 460 340, 540 365, 600 410
+             L 600 460 Z"
           fill={BLAZER}
         />
-        {/* Shirt — V-neck collar shape, sits inside the blazer */}
+        {/* Shirt collar — clean small V, no fussy lapels */}
         <path
-          d="M 240 345
-             L 268 380
-             L 300 405
-             L 332 380
-             L 360 345
-             L 350 360
-             L 300 395
-             L 250 360 Z"
+          d="M 250 340
+             L 280 372
+             L 300 388
+             L 320 372
+             L 350 340
+             L 335 350
+             L 300 380
+             L 265 350 Z"
           fill={SHIRT}
         />
-        {/* Inner shirt opening (skin V) */}
+        {/* Inner skin V at neckline */}
         <path
-          d="M 268 380 L 300 405 L 332 380 L 305 360 L 300 365 L 295 360 Z"
+          d="M 280 372 L 300 388 L 320 372 L 305 360 L 300 364 L 295 360 Z"
           fill={SKIN}
         />
-        {/* Lapel notch detail — subtle stroke */}
-        <path
-          d="M 245 365 L 268 380 M 355 365 L 332 380"
-          stroke={STROKE}
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          fill="none"
-          opacity="0.5"
-        />
       </g>
 
-      {/* ─────────────── NECK (behind face, in front of blazer) ─────────────── */}
+      {/* ─────────────── NECK ─────────────── */}
       <path
-        d="M 268 320
-           Q 268 360, 285 380
-           L 315 380
-           Q 332 360, 332 320 Z"
+        d="M 275 295
+           Q 275 335, 290 360
+           L 310 360
+           Q 325 335, 325 295 Z"
         fill={SKIN}
       />
 
-      {/* ─────────────── FACE shape (skin) ─────────────── */}
+      {/* ─────────────── FACE — egg shape, taller than wide, young proportions.
+          Top hides under the hair; the visible face starts around y=160. */}
       <path
-        d="M 200 220
-           C 200 175, 230 140, 300 140
-           C 370 140, 400 175, 400 220
-           C 400 280, 370 320, 300 320
-           C 230 320, 200 280, 200 220 Z"
+        d="M 215 195
+           C 215 145, 245 115, 300 115
+           C 355 115, 385 145, 385 195
+           C 385 240, 380 270, 365 290
+           C 350 305, 325 315, 300 315
+           C 275 315, 250 305, 235 290
+           C 220 270, 215 240, 215 195 Z"
         fill={SKIN}
       />
 
-      {/* ─────────────── BEARD (sits on top of skin, defined edge) ─────────────── */}
-      <path
-        d="M 215 230
-           C 215 270, 230 305, 260 320
-           Q 280 328, 300 328
-           Q 320 328, 340 320
-           C 370 305, 385 270, 385 230
-           C 385 235, 380 245, 372 250
-           C 360 252, 350 252, 340 250
-           Q 320 246, 300 246
-           Q 280 246, 260 250
-           C 250 252, 240 252, 228 250
-           C 220 245, 215 235, 215 230 Z"
-        fill={BEARD}
-      />
-      {/* Beard texture — short subtle highlights */}
-      <g opacity="0.18">
-        {Array.from({ length: 10 }).map((_, i) => {
-          const x = 232 + i * 14;
-          return (
-            <path
-              key={i}
-              d={`M ${x} ${268 + (i % 3) * 4} L ${x} ${280 + (i % 3) * 3}`}
-              stroke={SKIN}
-              strokeWidth="1.1"
-              strokeLinecap="round"
-              fill="none"
-            />
-          );
-        })}
-      </g>
-
-      {/* ─────────────── HAIR — wavy short with volume on top ─────────────── */}
+      {/* ─────────────── HAIR — full styled wavy quiff, sits ON TOP of the
+          face (renders after face so it covers crown). NOT a helmet — has
+          three distinct tufts on the upper edge for texture. */}
       <g>
-        {/* Main hair mass — covers crown, sides, hairline */}
         <path
-          d="M 200 200
-             C 196 165, 205 130, 225 105
-             C 240 88, 260 78, 285 75
-             C 310 72, 335 75, 360 90
-             C 385 105, 400 135, 405 170
-             C 408 188, 405 205, 400 218
-             L 395 200
-             Q 380 180, 360 175
-             L 350 178
-             Q 320 158, 290 162
-             Q 270 165, 255 175
-             Q 240 180, 225 178
-             Q 210 180, 200 200 Z"
+          d="M 213 200
+             C 208 165, 212 130, 232 105
+             C 248 88, 264 80, 280 80
+             Q 280 65, 298 60
+             Q 320 58, 332 75
+             Q 340 65, 358 70
+             Q 380 80, 388 100
+             C 400 115, 408 140, 408 170
+             C 408 188, 405 200, 400 205
+             L 395 195
+             Q 388 175, 372 168
+             L 360 172
+             Q 335 145, 305 148
+             Q 280 152, 262 168
+             Q 245 175, 230 175
+             Q 220 175, 213 200 Z"
           fill={HAIR}
         />
-        {/* Wavy strand 1 — adds texture on top */}
+        {/* Wave highlight on the quiff */}
         <path
-          d="M 230 110
-             Q 260 92, 295 95
-             Q 330 100, 360 115
-             Q 340 102, 305 96
-             Q 270 92, 240 105 Z"
-          fill={HAIR}
-          opacity="0.85"
-        />
-        {/* Wavy strand 2 — slight volume notch */}
-        <path
-          d="M 270 80
-             Q 305 72, 340 88
-             Q 320 78, 295 78
-             Q 280 78, 270 80 Z"
+          d="M 248 95
+             Q 282 75, 320 85
+             Q 350 95, 372 115
+             Q 348 100, 318 95
+             Q 285 90, 252 105 Z"
           fill={HAIR}
           opacity="0.7"
         />
-        {/* Subtle hairline texture along forehead */}
+        {/* Forehead hairline subtle stroke */}
         <path
-          d="M 225 175
-             Q 250 168, 280 168
-             Q 320 168, 365 175"
+          d="M 230 175 Q 270 170, 305 173 Q 350 175, 372 178"
           stroke={STROKE}
           strokeWidth="1"
           strokeLinecap="round"
           fill="none"
-          opacity="0.35"
+          opacity="0.3"
         />
       </g>
 
-      {/* ─────────────── EYEBROWS — bold confident bars ─────────────── */}
+      {/* ─────────────── BEARD — sits low on the face. Top edge stays well
+          BELOW the eyes. Cheekbone-to-chin shape that follows real beard
+          growth (not covering the mouth-and-up region). */}
+      <path
+        d="M 230 245
+           Q 235 270, 250 290
+           Q 270 308, 300 312
+           Q 330 308, 350 290
+           Q 365 270, 370 245
+           Q 358 250, 345 250
+           Q 322 250, 300 250
+           Q 278 250, 255 250
+           Q 242 250, 230 245 Z"
+        fill={BEARD}
+      />
+      {/* Mustache (separate filled shape that doesn't block the mouth) */}
+      <path
+        d="M 270 240
+           Q 285 234, 300 240
+           Q 315 234, 330 240
+           Q 320 244, 300 244
+           Q 280 244, 270 240 Z"
+        fill={BEARD}
+      />
+
+      {/* ─────────────── EYEBROWS — bold, slight upward tilt = friendly */}
       <path
         className={drawCls}
-        d="M 235 185 Q 252 178, 270 184"
+        d="M 238 195 Q 256 188, 274 194"
         stroke={STROKE}
-        strokeWidth="3.6"
+        strokeWidth="3.4"
         strokeLinecap="round"
         fill="none"
       />
       <path
         className={drawCls}
-        d="M 320 184 Q 338 178, 355 185"
+        d="M 326 194 Q 344 188, 362 195"
         stroke={STROKE}
-        strokeWidth="3.6"
+        strokeWidth="3.4"
         strokeLinecap="round"
         fill="none"
       />
 
-      {/* ─────────────── EYES (left) ─────────────── */}
+      {/* ─────────────── EYES (left) — almond-shaped with stroke outline,
+          smaller and more refined than v4's round eyes. */}
       <g>
-        {/* Sclera */}
-        <ellipse
-          cx="252"
-          cy="207"
-          rx="11"
-          ry="6"
+        {/* Almond outline — confident upper + lower lids */}
+        <path
+          d="M 240 213 Q 256 207, 272 213 Q 256 220, 240 213 Z"
           fill="var(--paper-2)"
+          stroke={STROKE}
+          strokeWidth="1.6"
+          strokeLinejoin="round"
         />
-        {/* Iris ring (subtle) */}
-        <circle cx="252" cy="207" r="5" fill={STROKE} opacity="0.15" />
-        {/* Pupil — animated */}
         <circle
           ref={pupilLeftRef}
-          cx="252"
-          cy="207"
-          r="3.4"
+          cx="256"
+          cy="213"
+          r="3"
           fill={STROKE}
           style={{ willChange: "transform" }}
         />
-        {/* Pupil highlight */}
-        <circle
-          cx="253.5"
-          cy="205.5"
-          r="1.1"
-          fill="var(--paper-2)"
-        />
-        {/* Eyelid — slides down on blink */}
+        <circle cx="257.5" cy="211.5" r="1" fill="var(--paper-2)" />
         <rect
           ref={lidLeftRef}
           x="240"
-          y="200"
-          width="24"
+          y="206"
+          width="32"
           height="14"
           fill={SKIN}
           stroke="none"
           clipPath="url(#eye-left-clip)"
           style={{
-            transformOrigin: "252px 200px",
+            transformOrigin: "256px 207px",
             transform: "scaleY(0)",
           }}
         />
@@ -380,62 +353,55 @@ export function EditorialPortrait() {
 
       {/* ─────────────── EYES (right) ─────────────── */}
       <g>
-        <ellipse
-          cx="338"
-          cy="207"
-          rx="11"
-          ry="6"
+        <path
+          d="M 328 213 Q 344 207, 360 213 Q 344 220, 328 213 Z"
           fill="var(--paper-2)"
+          stroke={STROKE}
+          strokeWidth="1.6"
+          strokeLinejoin="round"
         />
-        <circle cx="338" cy="207" r="5" fill={STROKE} opacity="0.15" />
         <circle
           ref={pupilRightRef}
-          cx="338"
-          cy="207"
-          r="3.4"
+          cx="344"
+          cy="213"
+          r="3"
           fill={STROKE}
           style={{ willChange: "transform" }}
         />
-        <circle
-          cx="339.5"
-          cy="205.5"
-          r="1.1"
-          fill="var(--paper-2)"
-        />
+        <circle cx="345.5" cy="211.5" r="1" fill="var(--paper-2)" />
         <rect
           ref={lidRightRef}
-          x="326"
-          y="200"
-          width="24"
+          x="328"
+          y="206"
+          width="32"
           height="14"
           fill={SKIN}
           stroke="none"
           clipPath="url(#eye-right-clip)"
           style={{
-            transformOrigin: "338px 200px",
+            transformOrigin: "344px 207px",
             transform: "scaleY(0)",
           }}
         />
       </g>
 
-      {/* ─────────────── NOSE — minimal soft hint ─────────────── */}
+      {/* ─────────────── NOSE — short clean curve, well above the beard */}
       <path
-        d="M 296 220
-           Q 294 240, 296 250
-           Q 300 254, 305 252"
+        d="M 298 225 Q 296 240, 300 247 Q 304 250, 308 247"
         stroke={STROKE}
-        strokeWidth="1.4"
+        strokeWidth="1.6"
         strokeLinecap="round"
         fill="none"
-        opacity="0.45"
+        opacity="0.55"
       />
 
-      {/* ─────────────── MOUTH — friendly smile (sits on the beard) ─────────────── */}
+      {/* ─────────────── MOUTH — gentle smile in the gap between mustache
+          and beard */}
       <path
         className={drawCls}
-        d="M 282 285 Q 300 293, 318 285"
+        d="M 285 268 Q 300 274, 315 268"
         stroke={STROKE}
-        strokeWidth="2"
+        strokeWidth="1.8"
         strokeLinecap="round"
         fill="none"
       />
