@@ -53,7 +53,7 @@ export function Header() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-40">
+    <header className="sticky top-3 lg:top-5 z-40">
       <div className="flex items-center justify-between rounded-2xl bg-paper-2/85 backdrop-blur-xl p-3 shadow-card border border-hairline">
         {/* Logo */}
         <Link
