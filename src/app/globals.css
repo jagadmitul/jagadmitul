@@ -382,7 +382,64 @@ html.lenis body {
   animation: cycling-number-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* SVG stroke draw-on (used by /concepts ContinuousLine) */
+/* SVG stroke draw-on (used by EditorialPortrait + retired /concepts route).
+   The element starts hidden via dasharray=400/dashoffset=400; the .drawn
+   class transitions the offset to 0 over ~1.6s so the stroke "draws on".
+   400 is a safe upper bound for the path lengths used in the portrait —
+   exact length isn't critical since the offset just snaps to fully drawn. */
+.portrait-stroke {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  transition: stroke-dashoffset 1600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.portrait-stroke-drawn {
+  stroke-dashoffset: 0;
+}
+
+/* Subtle breathing — the whole portrait gently inflates and relaxes on
+   a slow 5s loop. Disabled under reduced-motion. */
+@keyframes portrait-breathing {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.012);
+  }
+}
+.portrait-breathing {
+  transform-origin: 50% 60%;
+  animation: portrait-breathing 5s ease-in-out infinite;
+}
+
+/* Hair sway — rotates the hair-strands group ~1.5° back and forth on a
+   3.4s cycle. Pivot is at the crown so the swing reads as natural. */
+@keyframes portrait-hair-sway {
+  0%, 100% {
+    transform: rotate(-0.6deg);
+  }
+  50% {
+    transform: rotate(0.8deg);
+  }
+}
+.portrait-hair-sway {
+  transform-origin: 300px 70px;
+  animation: portrait-hair-sway 3.4s ease-in-out infinite;
+}
+
+/* Honour reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .portrait-breathing,
+  .portrait-hair-sway {
+    animation: none !important;
+  }
+  .portrait-stroke {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Legacy keyframe used by the old /concepts ContinuousLine. Kept here in
+   case the route is reintroduced; otherwise unreferenced. */
 @keyframes line-draw {
   to {
     stroke-dashoffset: 0;

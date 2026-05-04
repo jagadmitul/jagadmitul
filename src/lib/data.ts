@@ -615,6 +615,14 @@ const EXTRA_INTENTS: Record<string, string> = {
     "You can grab my resume from the Resume button on the homepage, or download it directly: jagadmitul.vercel.app/resume.pdf",
   social:
     "GitHub: github.com/jagadmitul · LinkedIn: linkedin.com/in/jagadmitul · Email: jagadmitul@gmail.com — I reply within 24 hours.",
+  // Casual Hinglish / Gujarati opener — covers "kaisa hai", "kem cho",
+  // "bhai sab thik", "yaar", etc. Replies in mixed Hindi/Gujarati/English
+  // because that's how Mitul actually talks to friends.
+  casual:
+    "Arre bhai, sab badhiya 🙌 — kaam chal raha hai, agents ship ho rahe hain. Tu bata, koi specific question hai? Pricing, work, stack, AI agents — neeche ek prompt pick kar le ya seedha jagadmitul@gmail.com pe likh de.",
+  // Explicit "answer in hindi/gujarati" request
+  language:
+    "Haan haan, samjho ho gaya 😄 — short jawab Hindi/Gujarati mein bhi de sakta hoon, but pricing, stack, work jaisi serious cheezein clarity ke liye English mein hi rakhta hoon. Tu bata, kya jaanna hai?",
 };
 
 const CHATBOT_KEYWORDS: Record<string, string> = {
@@ -713,6 +721,8 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   evening: "greeting",
   greetings: "greeting",
   namaste: "greeting",
+  namaskar: "greeting",
+  salaam: "greeting",
   who: "identity",
   yourself: "identity",
   about: "identity",
@@ -720,8 +730,6 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   introduction: "identity",
   bio: "identity",
   what: "what",
-  do: "what",
-  build: "what",
   hire: "hire",
   hiring: "hire",
   job: "hire",
@@ -747,27 +755,111 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   linkedin: "social",
   twitter: "social",
   social: "social",
+  // Hinglish + Gujarati casual openers / fillers — everything below maps
+  // to the `casual` intent which replies in mixed Hindi/Gujarati/English.
+  bhai: "casual",
+  bhaiya: "casual",
+  bro: "casual",
+  yaar: "casual",
+  dost: "casual",
+  dude: "casual",
+  kaisa: "casual",
+  kaise: "casual",
+  kaisi: "casual",
+  hai: "casual",
+  ho: "casual",
+  kya: "casual",
+  kyu: "casual",
+  kyun: "casual",
+  theek: "casual",
+  thik: "casual",
+  sahi: "casual",
+  achha: "casual",
+  accha: "casual",
+  badhiya: "casual",
+  badhia: "casual",
+  baki: "casual",
+  baaki: "casual",
+  sab: "casual",
+  sabkuch: "casual",
+  re: "casual",
+  arre: "casual",
+  arey: "casual",
+  haan: "casual",
+  nahi: "casual",
+  // Gujarati
+  kem: "casual",
+  cho: "casual",
+  che: "casual",
+  su: "casual",
+  saru: "casual",
+  saaru: "casual",
+  mast: "casual",
+  badhu: "casual",
+  pan: "casual",
+  // Explicit "switch to hindi/gujarati" requests
+  hindi: "language",
+  hinglish: "language",
+  gujarati: "language",
+  gujju: "language",
+  desi: "language",
+  bharat: "language",
 };
 
 const CHATBOT_FALLBACK =
   "Hmm, I'm not quite sure on that one — but I can answer questions about my pricing, availability, tech stack, AI agent work, recent projects, or how to start an engagement. Try one of the prompts below, or just rephrase. For anything specific, jagadmitul@gmail.com works too.";
+
+// Multi-character keywords that are SAFE to substring-match (rare bigrams
+// that never appear inside common Hindi/Gujarati/English words). The
+// blanket .includes() fallback used to be here was the source of the
+// "ai → agents" bug — "bhai", "kaisa", "hai" all contain "ai" and were
+// triggering the AI agents response. We keep an explicit allow-list so
+// long phrases like "what's your stack" still resolve via the long word.
+const SUBSTRING_SAFE = new Set([
+  "pricing",
+  "availability",
+  "stack",
+  "experience",
+  "portfolio",
+  "langchain",
+  "langgraph",
+  "automation",
+  "workflow",
+  "openai",
+  "anthropic",
+  "location",
+  "remote",
+  "timezone",
+  "freelance",
+  "contract",
+  "thanks",
+  "resume",
+  "github",
+  "linkedin",
+  "namaste",
+  "gujarati",
+  "hinglish",
+]);
 
 export function matchPrompt(question: string): string {
   const q = question.toLowerCase().trim();
   if (!q) return CHATBOT_FALLBACK;
 
   const counts: Record<string, number> = {};
-  // Match whole words (with simple boundary check) so "ai" doesn't match
-  // "fail" or "rate" doesn't match "frustrate". We tokenise + check
-  // membership rather than .includes() which was over-matching before.
-  const tokens = q.split(/[\s,.!?'"()/-]+/).filter(Boolean);
+  // Primary: tokenise and look up each whole token in the keyword map.
+  // Punctuation, contractions, slashes are all stripped to whitespace.
+  const tokens = q.split(/[\s,.!?'"()/\-_]+/).filter(Boolean);
   for (const token of tokens) {
     const intent = CHATBOT_KEYWORDS[token];
-    if (intent) counts[intent] = (counts[intent] ?? 0) + 2; // exact token
+    if (intent) counts[intent] = (counts[intent] ?? 0) + 2;
   }
-  // Fallback: substring match for compound queries (e.g. "what's your stack")
+
+  // Secondary: only the SUBSTRING_SAFE allow-list does a .includes() check.
+  // Short ambiguous keys ("ai", "do", "hi", "ho") are NEVER substring-matched
+  // because they false-trigger inside Hindi/Gujarati words.
   if (Object.keys(counts).length === 0) {
     for (const [keyword, intent] of Object.entries(CHATBOT_KEYWORDS)) {
+      if (!SUBSTRING_SAFE.has(keyword)) continue;
       if (q.includes(keyword)) counts[intent] = (counts[intent] ?? 0) + 1;
     }
   }
@@ -776,7 +868,6 @@ export function matchPrompt(question: string): string {
   if (!best) return CHATBOT_FALLBACK;
   const intent = best[0];
 
-  // Look first in EXTRA_INTENTS, then in CHATBOT_PROMPTS
   if (intent in EXTRA_INTENTS) return EXTRA_INTENTS[intent];
   const found = CHATBOT_PROMPTS.find((p) => p.id === intent);
   return found?.answer ?? CHATBOT_FALLBACK;

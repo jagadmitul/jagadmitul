@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Copy, Download, Github, Linkedin } from "lucide-react";
 import { PROFILE } from "@/lib/data";
+import { EditorialPortrait } from "@/components/visual/EditorialPortrait";
 
 /**
  * Intro card — the leftmost column of the home page. Now uses a clean
@@ -21,39 +22,17 @@ export function IntroCard() {
 
   return (
     <div className="rounded-2xl bg-paper-2/85 backdrop-blur-xl border border-hairline p-6 shadow-card h-full flex flex-col">
-      {/* Profile placeholder — clean gradient + monogram + status pill */}
+      {/* Profile area — animated editorial line-art portrait. Strokes use
+          var(--primary) so the portrait re-tints with every theme. */}
       <div className="aspect-[6/4] overflow-hidden rounded-xl relative">
-        {/* Soft gradient base */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, color-mix(in srgb, var(--primary) 28%, var(--paper-2)) 0%, var(--paper-2) 50%, color-mix(in srgb, var(--primary) 14%, var(--paper-2)) 100%)",
+              "linear-gradient(135deg, color-mix(in srgb, var(--primary) 16%, var(--paper-2)) 0%, var(--paper-2) 60%, color-mix(in srgb, var(--primary) 8%, var(--paper-2)) 100%)",
           }}
         />
-        {/* Subtle decorative ring */}
-        <div
-          className="absolute inset-6 rounded-full opacity-40"
-          style={{
-            background: "transparent",
-            border: "1px dashed var(--primary)",
-          }}
-        />
-        {/* Monogram — Instrument Serif italic. Single-weight (400) font
-            with a striking, characterful italic; reads as editorial/display
-            even without a heavy weight. */}
-        <div className="absolute inset-0 grid place-items-center">
-          <div
-            className="font-display text-primary leading-none select-none"
-            style={{
-              fontStyle: "italic",
-              fontSize: "clamp(6rem, 11vw, 10rem)",
-              letterSpacing: "-0.03em",
-            }}
-          >
-            MJ
-          </div>
-        </div>
+        <EditorialPortrait />
         {/* Status pill */}
         <div className="absolute bottom-3 left-3 z-10">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-paper-2/95 backdrop-blur px-2.5 py-1 text-[0.65rem] font-mono uppercase tracking-wider text-ink">
