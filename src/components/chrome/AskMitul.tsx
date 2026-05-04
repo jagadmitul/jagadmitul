@@ -31,14 +31,21 @@ export function AskMitul() {
   const turnCountRef = useRef(turns.length);
 
   // Auto-scroll on every new turn (including the typing indicator).
+  // Two staged scrolls — one immediately on render, one after the spring
+  // animation settles (~360ms) so the final post-animation height is hit.
   useEffect(() => {
     if (turns.length === turnCountRef.current) return;
     turnCountRef.current = turns.length;
     const el = scrollRef.current;
     if (!el) return;
-    requestAnimationFrame(() => {
-      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-    });
+    const scrollDown = () => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    requestAnimationFrame(scrollDown);
+    const t1 = setTimeout(scrollDown, 200);
+    const t2 = setTimeout(scrollDown, 500);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [turns]);
 
   function dispatchAnswer(promptText: string, answerText: string) {
@@ -135,10 +142,13 @@ export function AskMitul() {
               </Dialog.Close>
             </div>
 
-            {/* BODY */}
+            {/* BODY — `data-lenis-prevent` opts this scroll container out
+                of Lenis's site-wide smooth-scroll, so the user can scroll
+                inside the chat with mouse wheel / trackpad normally. */}
             <div
               ref={scrollRef}
-              className="flex-1 overflow-y-auto px-5 py-4 space-y-3 scroll-smooth"
+              data-lenis-prevent
+              className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-3 scroll-smooth"
               style={{ backgroundColor: "var(--paper-2)" }}
             >
               <AnimatePresence initial={false}>

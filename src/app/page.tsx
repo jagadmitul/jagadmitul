@@ -11,58 +11,62 @@ import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 
 /**
- * Home — true bento grid using CSS Grid row-spans. Six cards, two per
- * column (top tall + bottom short). Each "tall" card spans 3 rows and
- * each "short" card spans 2 rows of an auto-sized grid, so all three
- * columns end at the same total height — no empty gap below shorter
- * columns.
- *
- * Bottom row: ServicesCard (2 cols) + CtaMarquee (1 col).
+ * Home — three-column grid where columns are flex-col stacks of cards.
+ * Each column has 2 cards (top + bottom). Cards size to their natural
+ * content height — no forced stretching means no empty interior space
+ * inside any card. Bottom row: ServicesCard (col-span-2) + CtaMarquee.
  */
 export default function Home() {
   return (
     <PageShell>
-      <main className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6 lg:auto-rows-[minmax(120px,auto)]">
-        {/* Row 1: tall cards — 3 row spans each */}
-        <ScrollReveal className="lg:row-span-3 h-full">
-          <TiltCard max={5}>
-            <IntroCard />
-          </TiltCard>
-        </ScrollReveal>
-        <ScrollReveal className="lg:row-span-3 h-full" delay={0.05}>
-          <TiltCard max={5}>
-            <ExperienceCard />
-          </TiltCard>
-        </ScrollReveal>
-        <ScrollReveal className="lg:row-span-3 h-full" delay={0.1}>
-          <TiltCard max={5}>
-            <ProjectsCard limit={3} />
-          </TiltCard>
-        </ScrollReveal>
+      <main className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6 lg:items-start">
+        {/* Column 1 */}
+        <div className="flex flex-col gap-4 lg:gap-6">
+          <ScrollReveal>
+            <TiltCard max={5}>
+              <IntroCard />
+            </TiltCard>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <TiltCard max={5}>
+              <NowCard />
+            </TiltCard>
+          </ScrollReveal>
+        </div>
 
-        {/* Row 2: shorter cards — 2 row spans each */}
-        <ScrollReveal className="lg:row-span-2 h-full" delay={0.15}>
-          <TiltCard max={5}>
-            <NowCard />
-          </TiltCard>
-        </ScrollReveal>
-        <ScrollReveal className="lg:row-span-2 h-full" delay={0.2}>
-          <TiltCard max={5}>
-            <SkillsCard />
-          </TiltCard>
-        </ScrollReveal>
-        <ScrollReveal className="lg:row-span-2 h-full" delay={0.25}>
-          <TiltCard max={5}>
-            <StatsCard />
-          </TiltCard>
-        </ScrollReveal>
+        {/* Column 2 */}
+        <div className="flex flex-col gap-4 lg:gap-6">
+          <ScrollReveal delay={0.05}>
+            <TiltCard max={5}>
+              <ExperienceCard />
+            </TiltCard>
+          </ScrollReveal>
+          <ScrollReveal delay={0.15}>
+            <TiltCard max={5}>
+              <SkillsCard />
+            </TiltCard>
+          </ScrollReveal>
+        </div>
 
-        {/* Bottom CTA row — limit Services to 4 tiles so the row is more
-            compact and visually paired with the CTA card on the right. */}
-        <ScrollReveal className="lg:col-span-2 h-full" delay={0.05}>
-          <ServicesCard limit={4} />
+        {/* Column 3 */}
+        <div className="flex flex-col gap-4 lg:gap-6">
+          <ScrollReveal delay={0.1}>
+            <TiltCard max={5}>
+              <ProjectsCard limit={3} />
+            </TiltCard>
+          </ScrollReveal>
+          <ScrollReveal delay={0.2}>
+            <TiltCard max={5}>
+              <StatsCard />
+            </TiltCard>
+          </ScrollReveal>
+        </div>
+
+        {/* Bottom CTA row */}
+        <ScrollReveal className="lg:col-span-2" delay={0.05}>
+          <ServicesCard limit={6} />
         </ScrollReveal>
-        <ScrollReveal className="h-full" delay={0.1}>
+        <ScrollReveal delay={0.1}>
           <CtaMarquee />
         </ScrollReveal>
       </main>
