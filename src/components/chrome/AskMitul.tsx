@@ -28,23 +28,39 @@ export function AskMitul() {
   const [turns, setTurns] = useState<Turn[]>([INTRO]);
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const turnCountRef = useRef(turns.length);
+  const endRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll on every new turn (including the typing indicator).
-  // Two staged scrolls — one immediately on render, one after the spring
-  // animation settles (~360ms) so the final post-animation height is hit.
+  // Auto-scroll using a sentinel element + scrollIntoView. Fires on every
+  // new turn (including typing indicator) AND uses ResizeObserver so any
+  // post-animation height growth (Framer spring settling) ALSO triggers
+  // a scroll-down. This is the most robust pattern for animated chat UIs.
   useEffect(() => {
-    if (turns.length === turnCountRef.current) return;
-    turnCountRef.current = turns.length;
-    const el = scrollRef.current;
-    if (!el) return;
-    const scrollDown = () => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    const end = endRef.current;
+    const scroller = scrollRef.current;
+    if (!end || !scroller) return;
+
+    const scrollDown = () => {
+      end.scrollIntoView({ behavior: "smooth", block: "end" });
+    };
+
+    // Immediate + post-paint + post-spring-settle
+    scrollDown();
     requestAnimationFrame(scrollDown);
-    const t1 = setTimeout(scrollDown, 200);
-    const t2 = setTimeout(scrollDown, 500);
+    const t1 = setTimeout(scrollDown, 250);
+    const t2 = setTimeout(scrollDown, 600);
+
+    // Watch for any future content height changes (image loads, late
+    // animations) and re-scroll
+    const observer = new ResizeObserver(() => scrollDown());
+    observer.observe(scroller);
+    if (scroller.firstElementChild) {
+      observer.observe(scroller.firstElementChild);
+    }
+
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      observer.disconnect();
     };
   }, [turns]);
 
@@ -75,19 +91,28 @@ export function AskMitul() {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen} modal={false}>
-      <Dialog.Trigger asChild>
-        <motion.button
-          type="button"
-          className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-primary-ink shadow-lg font-mono text-xs tracking-wider uppercase"
-          aria-label="Ask Mitul"
-          whileHover={reduced ? undefined : { scale: 1.06 }}
-          whileTap={reduced ? undefined : { scale: 0.96 }}
-          transition={{ type: "spring", stiffness: 380, damping: 28 }}
-        >
-          <Sparkles size={14} strokeWidth={2.2} />
-          <span>Ask Mitul</span>
-        </motion.button>
-      </Dialog.Trigger>
+      {/* Hide the trigger entirely while the dialog is open so it doesn't
+          peek out from behind the panel in the bottom-right corner. */}
+      <AnimatePresence>
+        {!open && (
+          <Dialog.Trigger asChild>
+            <motion.button
+              type="button"
+              className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-primary-ink shadow-lg font-mono text-xs tracking-wider uppercase"
+              aria-label="Ask Mitul"
+              initial={reduced ? false : { opacity: 0, scale: 0.7, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={reduced ? undefined : { opacity: 0, scale: 0.7, y: 20 }}
+              whileHover={reduced ? undefined : { scale: 1.06 }}
+              whileTap={reduced ? undefined : { scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+            >
+              <Sparkles size={14} strokeWidth={2.2} />
+              <span>Ask Mitul</span>
+            </motion.button>
+          </Dialog.Trigger>
+        )}
+      </AnimatePresence>
       <Dialog.Portal>
         <Dialog.Content
           aria-describedby={undefined}
@@ -213,6 +238,9 @@ export function AskMitul() {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={reduced ? undefined : { opacity: 0, scale: 0.96 }}
                       transition={baseTransition}
+                      onAnimationComplete={() => {
+                        endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+                      }}
                       className="flex justify-start"
                     >
                       <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-paper border border-hairline px-4 py-2.5 text-[0.9rem] text-ink shadow-sm">
@@ -222,6 +250,8 @@ export function AskMitul() {
                   );
                 })}
               </AnimatePresence>
+              {/* Sentinel — auto-scroll target */}
+              <div ref={endRef} aria-hidden="true" />
             </div>
 
             {/* FOOTER */}

@@ -71,12 +71,35 @@ export default function AboutPage() {
               </ul>
             </div>
 
-            {/* Where I work best */}
-            <div className="mt-10 p-5 rounded-xl bg-paper border-l-4 border-primary">
-              <h3 className="text-sm font-mono uppercase tracking-wider text-primary mb-2">
+            {/* Where I work best — replace the left-stripe notification look
+                with a primary-tinted pull-quote card. Quote glyph + soft
+                gradient bg. Reads as editorial, not as an alert. */}
+            <div
+              className="mt-10 p-6 lg:p-8 rounded-2xl border border-primary/20 relative overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, transparent), color-mix(in srgb, var(--primary) 4%, transparent) 60%, transparent)",
+              }}
+            >
+              <span
+                aria-hidden="true"
+                className="absolute top-3 right-4 font-display select-none pointer-events-none"
+                style={{
+                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                  fontStyle: "italic",
+                  fontWeight: 700,
+                  fontSize: "5rem",
+                  lineHeight: 1,
+                  color: "var(--primary)",
+                  opacity: 0.18,
+                }}
+              >
+                &ldquo;
+              </span>
+              <div className="text-[0.7rem] font-mono uppercase tracking-[0.18em] text-primary mb-3">
                 WHERE I WORK BEST
-              </h3>
-              <p className="text-base text-ink leading-relaxed">
+              </div>
+              <p className="text-lg lg:text-xl text-ink leading-relaxed font-medium relative z-10">
                 {ABOUT.strongest}
               </p>
             </div>

@@ -19,7 +19,7 @@ import { TiltCard } from "@/components/motion/TiltCard";
 export default function Home() {
   return (
     <PageShell>
-      <main className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6 lg:items-start">
+      <main className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
         {/* Column 1 */}
         <div className="flex flex-col gap-4 lg:gap-6">
           <ScrollReveal>

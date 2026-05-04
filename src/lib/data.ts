@@ -590,7 +590,35 @@ export const CHATBOT_PROMPTS = [
   },
 ];
 
+/**
+ * Conversational intents that don't appear as quick prompts but ARE
+ * matched in free-form input — greetings, identity questions, thanks,
+ * goodbyes, etc. Lets the chat handle natural-language openers like
+ * "hi", "who are you", "thanks", etc. instead of bouncing them to email.
+ */
+const EXTRA_INTENTS: Record<string, string> = {
+  greeting:
+    "Hey there 👋 I'm Mitul — a senior full-stack & AI engineer based in Surat, India. Pick a quick prompt below or ask me anything about my work, pricing, availability, or stack.",
+  identity:
+    "I'm Mitul Jagad — a senior full-stack engineer with 5+ years shipping production systems for SaaS, FinTech, and HealthTech startups across the US, UK, AU and Israel. For the past year I've specialised in AI agents and workflow automation. Recent wins: 100K-user SSO platform at MedChron.AI and a 92% SQL latency win at TAPUZ.",
+  what:
+    "I build production-grade systems where AI meets real engineering — multi-step LangGraph agents, performance-critical backends, enterprise auth, and full-stack SaaS. Most of my engagements are 3–6 month embedded senior contracts, but I'm also open to the right full-time senior / staff role.",
+  hire:
+    "Yes — I'm currently open for senior engagements (3–6 month contracts or the right full-time role). Around 30 hours/week of capacity. Send a short brief to jagadmitul@gmail.com and I'll get back to you within 24 hours.",
+  thanks:
+    "You're welcome 🙌 — anything else I can answer? Otherwise jagadmitul@gmail.com is the fastest way to reach me directly.",
+  bye:
+    "Take care 👋 — jagadmitul@gmail.com is always the fastest way to reach me directly.",
+  help:
+    "Sure! I can answer questions about my pricing, availability, tech stack, recent work, AI agent specialism, location, or how to start an engagement. Pick a prompt below or just type your question.",
+  resume:
+    "You can grab my resume from the Resume button on the homepage, or download it directly: jagadmitul.vercel.app/resume.pdf",
+  social:
+    "GitHub: github.com/jagadmitul · LinkedIn: linkedin.com/in/jagadmitul · Email: jagadmitul@gmail.com — I reply within 24 hours.",
+};
+
 const CHATBOT_KEYWORDS: Record<string, string> = {
+  // pricing
   pricing: "pricing",
   price: "pricing",
   cost: "pricing",
@@ -598,33 +626,62 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   budget: "pricing",
   rate: "pricing",
   quote: "pricing",
+  fees: "pricing",
+  expensive: "pricing",
+  affordable: "pricing",
+  invoice: "pricing",
+  // availability
   available: "availability",
   availability: "availability",
   free: "availability",
-  hire: "availability",
-  hiring: "availability",
   capacity: "availability",
+  schedule: "availability",
+  busy: "availability",
+  open: "availability",
+  // stack
   stack: "stack",
   tech: "stack",
   technology: "stack",
   language: "stack",
   framework: "stack",
   tools: "stack",
+  typescript: "stack",
+  javascript: "stack",
+  python: "stack",
+  react: "stack",
+  next: "stack",
+  nextjs: "stack",
+  node: "stack",
+  nestjs: "stack",
+  postgres: "stack",
+  database: "stack",
+  // experience / projects
   experience: "experience",
   recent: "experience",
   work: "experience",
   project: "experience",
   projects: "experience",
+  portfolio: "experience",
   shipped: "experience",
   built: "experience",
   past: "experience",
+  case: "experience",
+  // AI agents
   ai: "ai",
   agent: "ai",
   agents: "ai",
   langchain: "ai",
   langgraph: "ai",
   llm: "ai",
+  llms: "ai",
   automation: "ai",
+  workflow: "ai",
+  workflows: "ai",
+  openai: "ai",
+  anthropic: "ai",
+  claude: "ai",
+  gpt: "ai",
+  // location
   location: "location",
   based: "location",
   where: "location",
@@ -632,28 +689,95 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   timezone: "location",
   india: "location",
   surat: "location",
+  // start
   start: "start",
   begin: "start",
   process: "start",
-  next: "start",
   email: "start",
   contact: "start",
   reach: "start",
+  brief: "start",
+  message: "start",
+  call: "start",
+  meeting: "start",
+  // EXTRA conversational intents
+  hi: "greeting",
+  hii: "greeting",
+  hiii: "greeting",
+  hello: "greeting",
+  hey: "greeting",
+  yo: "greeting",
+  sup: "greeting",
+  morning: "greeting",
+  afternoon: "greeting",
+  evening: "greeting",
+  greetings: "greeting",
+  namaste: "greeting",
+  who: "identity",
+  yourself: "identity",
+  about: "identity",
+  intro: "identity",
+  introduction: "identity",
+  bio: "identity",
+  what: "what",
+  do: "what",
+  build: "what",
+  hire: "hire",
+  hiring: "hire",
+  job: "hire",
+  contract: "hire",
+  freelance: "hire",
+  consult: "hire",
+  thanks: "thanks",
+  thank: "thanks",
+  thx: "thanks",
+  cheers: "thanks",
+  appreciated: "thanks",
+  bye: "bye",
+  goodbye: "bye",
+  later: "bye",
+  cya: "bye",
+  help: "help",
+  question: "help",
+  ask: "help",
+  options: "help",
+  resume: "resume",
+  cv: "resume",
+  github: "social",
+  linkedin: "social",
+  twitter: "social",
+  social: "social",
 };
 
 const CHATBOT_FALLBACK =
-  "I don't have a scripted answer for that one. The fastest way is to send a short brief to jagadmitul@gmail.com — I reply within 24 hours.";
+  "Hmm, I'm not quite sure on that one — but I can answer questions about my pricing, availability, tech stack, AI agent work, recent projects, or how to start an engagement. Try one of the prompts below, or just rephrase. For anything specific, jagadmitul@gmail.com works too.";
 
 export function matchPrompt(question: string): string {
-  const q = question.toLowerCase();
+  const q = question.toLowerCase().trim();
+  if (!q) return CHATBOT_FALLBACK;
+
   const counts: Record<string, number> = {};
-  for (const [keyword, promptId] of Object.entries(CHATBOT_KEYWORDS)) {
-    if (q.includes(keyword)) {
-      counts[promptId] = (counts[promptId] ?? 0) + 1;
+  // Match whole words (with simple boundary check) so "ai" doesn't match
+  // "fail" or "rate" doesn't match "frustrate". We tokenise + check
+  // membership rather than .includes() which was over-matching before.
+  const tokens = q.split(/[\s,.!?'"()/-]+/).filter(Boolean);
+  for (const token of tokens) {
+    const intent = CHATBOT_KEYWORDS[token];
+    if (intent) counts[intent] = (counts[intent] ?? 0) + 2; // exact token
+  }
+  // Fallback: substring match for compound queries (e.g. "what's your stack")
+  if (Object.keys(counts).length === 0) {
+    for (const [keyword, intent] of Object.entries(CHATBOT_KEYWORDS)) {
+      if (q.includes(keyword)) counts[intent] = (counts[intent] ?? 0) + 1;
     }
   }
+
   const best = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
   if (!best) return CHATBOT_FALLBACK;
-  const found = CHATBOT_PROMPTS.find((p) => p.id === best[0]);
+  const intent = best[0];
+
+  // Look first in EXTRA_INTENTS, then in CHATBOT_PROMPTS
+  if (intent in EXTRA_INTENTS) return EXTRA_INTENTS[intent];
+  const found = CHATBOT_PROMPTS.find((p) => p.id === intent);
   return found?.answer ?? CHATBOT_FALLBACK;
 }
