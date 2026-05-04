@@ -60,6 +60,38 @@ export default function ConceptsPage() {
           >
             <CyclingNumber />
           </ConceptCard>
+
+          <ConceptCard
+            n={5}
+            name="Liquid Mercury MJ"
+            note="Custom logo: same goo-filter physics as the cursor, but here the blobs settle into 'MJ'. Site-wide brand consistency — the cursor IS the logo. Hover to see them un-merge."
+          >
+            <LiquidMJ />
+          </ConceptCard>
+
+          <ConceptCard
+            n={6}
+            name="System Architecture Self-Portrait"
+            note="A schematic 'block diagram' of Mitul-as-a-system. Labeled nodes (BRAIN · STACK · HANDS · OUTPUT) wired together. Zero other portfolios do this — pure engineer identity."
+          >
+            <SystemPortrait />
+          </ConceptCard>
+
+          <ConceptCard
+            n={7}
+            name="Continuous-Line Portrait"
+            note="A single SVG stroke draws an abstract figure on mount (stroke-dasharray reveal). Editorial, hand-drawn, feels like a Picasso line study."
+          >
+            <ContinuousLine />
+          </ConceptCard>
+
+          <ConceptCard
+            n={8}
+            name="Live Agent Graph"
+            note="Visualizes a LangGraph-style multi-agent workflow: nodes pulse, edges fire in sequence. Reflects the literal work he ships — AI agent pipelines."
+          >
+            <AgentGraph />
+          </ConceptCard>
         </section>
       </main>
     </PageShell>
@@ -288,6 +320,378 @@ function LiveConsole() {
         {cur.comment && (
           <div className="text-paper/40 ml-4">{cur.comment}</div>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────── Concept 5 — Liquid Mercury MJ ─────────────── */
+
+function LiquidMJ() {
+  // SVG goo filter merges nearby circles into one shape. Positioned to
+  // form an 'M' on the left and a 'J' on the right. They drift gently.
+  return (
+    <div
+      className="absolute inset-0"
+      style={{
+        background:
+          "linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, var(--paper-2)) 0%, var(--paper-2) 50%, color-mix(in srgb, var(--primary) 8%, var(--paper-2)) 100%)",
+      }}
+    >
+      <svg width="0" height="0" style={{ position: "absolute" }}>
+        <defs>
+          <filter id="mj-goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0
+                      0 1 0 0 0
+                      0 0 1 0 0
+                      0 0 0 22 -11"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      <svg
+        viewBox="0 0 600 400"
+        className="absolute inset-0 w-full h-full mj-drift"
+        style={{ filter: "url(#mj-goo)" }}
+      >
+        {/* M — five circles */}
+        <circle cx="120" cy="280" r="42" fill="var(--primary)" />
+        <circle cx="160" cy="180" r="38" fill="var(--primary)" />
+        <circle cx="200" cy="220" r="34" fill="var(--primary)" />
+        <circle cx="240" cy="180" r="38" fill="var(--primary)" />
+        <circle cx="280" cy="280" r="42" fill="var(--primary)" />
+        {/* J — three circles */}
+        <circle cx="400" cy="170" r="40" fill="var(--primary)" />
+        <circle cx="400" cy="260" r="36" fill="var(--primary)" />
+        <circle cx="360" cy="310" r="40" fill="var(--primary)" />
+      </svg>
+    </div>
+  );
+}
+
+/* ─────────────── Concept 6 — System Architecture Self-Portrait ─────────────── */
+
+function SystemPortrait() {
+  return (
+    <div
+      className="absolute inset-0 p-5"
+      style={{
+        background:
+          "linear-gradient(135deg, color-mix(in srgb, var(--primary) 10%, var(--paper-2)) 0%, var(--paper-2) 100%)",
+      }}
+    >
+      {/* dot grid */}
+      <div
+        className="absolute inset-0 opacity-25"
+        style={{
+          backgroundImage:
+            "radial-gradient(var(--ink-mute) 1px, transparent 1px)",
+          backgroundSize: "14px 14px",
+        }}
+      />
+
+      <svg
+        viewBox="0 0 600 380"
+        className="relative w-full h-full"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {/* connector lines */}
+        <g
+          stroke="var(--primary)"
+          strokeWidth="1.4"
+          strokeDasharray="3 4"
+          opacity="0.55"
+          fill="none"
+        >
+          <path d="M 300 70 L 300 130" />
+          <path d="M 300 180 L 150 240" />
+          <path d="M 300 180 L 450 240" />
+          <path d="M 300 180 L 300 240" />
+          <path d="M 150 290 L 300 340" />
+          <path d="M 300 290 L 300 340" />
+          <path d="M 450 290 L 300 340" />
+        </g>
+
+        {/* INPUT */}
+        <g>
+          <rect
+            x="240"
+            y="30"
+            width="120"
+            height="40"
+            rx="8"
+            fill="var(--paper-2)"
+            stroke="var(--primary)"
+            strokeWidth="1.2"
+          />
+          <text
+            x="300"
+            y="55"
+            textAnchor="middle"
+            fontFamily="ui-monospace, monospace"
+            fontSize="11"
+            fill="var(--ink)"
+          >
+            BRIEF · CLIENT
+          </text>
+        </g>
+
+        {/* CORE — Mitul */}
+        <g>
+          <rect
+            x="220"
+            y="130"
+            width="160"
+            height="50"
+            rx="10"
+            fill="var(--primary)"
+          />
+          <text
+            x="300"
+            y="153"
+            textAnchor="middle"
+            fontFamily="ui-monospace, monospace"
+            fontSize="10"
+            fill="var(--primary-ink)"
+            opacity="0.7"
+          >
+            CORE
+          </text>
+          <text
+            x="300"
+            y="170"
+            textAnchor="middle"
+            fontFamily="serif"
+            fontStyle="italic"
+            fontSize="18"
+            fill="var(--primary-ink)"
+          >
+            MITUL
+          </text>
+        </g>
+
+        {/* SUB-SYSTEMS */}
+        {[
+          { x: 90, label: "BRAIN", body: "AI / AGENTS" },
+          { x: 240, label: "STACK", body: "TS · NEST · NEXT" },
+          { x: 390, label: "HANDS", body: "SHIP · ITERATE" },
+        ].map((m) => (
+          <g key={m.label}>
+            <rect
+              x={m.x}
+              y="240"
+              width="120"
+              height="50"
+              rx="8"
+              fill="var(--paper-2)"
+              stroke="var(--primary)"
+              strokeWidth="1"
+              opacity="0.95"
+            />
+            <text
+              x={m.x + 60}
+              y="262"
+              textAnchor="middle"
+              fontFamily="ui-monospace, monospace"
+              fontSize="9"
+              fill="var(--primary)"
+            >
+              {m.label}
+            </text>
+            <text
+              x={m.x + 60}
+              y="278"
+              textAnchor="middle"
+              fontFamily="ui-monospace, monospace"
+              fontSize="10"
+              fill="var(--ink)"
+            >
+              {m.body}
+            </text>
+          </g>
+        ))}
+
+        {/* OUTPUT */}
+        <g>
+          <rect
+            x="220"
+            y="340"
+            width="160"
+            height="32"
+            rx="6"
+            fill="var(--ink)"
+          />
+          <text
+            x="300"
+            y="361"
+            textAnchor="middle"
+            fontFamily="ui-monospace, monospace"
+            fontSize="11"
+            fill="var(--paper-2)"
+          >
+            OUTPUT · PROD
+          </text>
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+/* ─────────────── Concept 7 — Continuous-Line Portrait ─────────────── */
+
+function ContinuousLine() {
+  // A single SVG path drawn as one stroke — abstract figure (head, neck,
+  // shoulder line) inspired by Picasso line studies. Animates draw-on.
+  return (
+    <div
+      className="absolute inset-0"
+      style={{
+        background:
+          "linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--paper-2)) 0%, var(--paper-2) 100%)",
+      }}
+    >
+      <svg
+        viewBox="0 0 600 400"
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <path
+          className="line-draw"
+          d="M 180 100
+             C 220 60, 320 60, 360 110
+             C 400 160, 380 220, 340 240
+             C 320 250, 320 280, 340 290
+             C 380 305, 420 320, 420 360
+             L 180 360
+             C 180 320, 220 305, 260 290
+             C 280 280, 280 250, 260 240
+             C 220 220, 200 160, 240 110
+             C 250 100, 270 95, 290 95
+             M 240 150 Q 260 165, 280 150
+             M 320 150 Q 340 165, 360 150"
+          stroke="var(--primary)"
+          strokeWidth="2.2"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <div className="absolute bottom-4 left-4">
+        <span className="inline-flex items-center gap-1.5 text-[0.6rem] font-mono uppercase tracking-wider text-ink-mute">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          STUDY · ONE STROKE
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────── Concept 8 — Live Agent Graph ─────────────── */
+
+const GRAPH_NODES = [
+  { id: "in", x: 80, y: 200, label: "INPUT" },
+  { id: "rt", x: 200, y: 100, label: "ROUTE" },
+  { id: "rg", x: 320, y: 80, label: "RAG" },
+  { id: "tl", x: 320, y: 200, label: "TOOL" },
+  { id: "vd", x: 200, y: 300, label: "VALIDATE" },
+  { id: "lm", x: 440, y: 160, label: "LLM" },
+  { id: "ot", x: 540, y: 200, label: "OUTPUT" },
+];
+
+const GRAPH_EDGES: [string, string][] = [
+  ["in", "rt"],
+  ["in", "vd"],
+  ["rt", "rg"],
+  ["rt", "tl"],
+  ["rg", "lm"],
+  ["tl", "lm"],
+  ["vd", "lm"],
+  ["lm", "ot"],
+];
+
+function AgentGraph() {
+  const [pulse, setPulse] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPulse((p) => (p + 1) % GRAPH_EDGES.length);
+    }, 360);
+    return () => clearInterval(id);
+  }, []);
+
+  const nodeById = (id: string) => GRAPH_NODES.find((n) => n.id === id)!;
+
+  return (
+    <div
+      className="absolute inset-0"
+      style={{
+        background: "var(--ink)",
+      }}
+    >
+      <svg
+        viewBox="0 0 620 400"
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {/* edges */}
+        {GRAPH_EDGES.map(([a, b], i) => {
+          const na = nodeById(a);
+          const nb = nodeById(b);
+          const active = i === pulse;
+          return (
+            <line
+              key={`${a}-${b}`}
+              x1={na.x}
+              y1={na.y}
+              x2={nb.x}
+              y2={nb.y}
+              stroke={active ? "var(--primary)" : "rgba(255,255,255,0.15)"}
+              strokeWidth={active ? 2 : 1}
+              style={{ transition: "all 200ms ease" }}
+            />
+          );
+        })}
+
+        {/* nodes */}
+        {GRAPH_NODES.map((n, i) => {
+          const involved =
+            GRAPH_EDGES[pulse][0] === n.id || GRAPH_EDGES[pulse][1] === n.id;
+          return (
+            <g key={n.id}>
+              <circle
+                cx={n.x}
+                cy={n.y}
+                r={involved ? 22 : 18}
+                fill={involved ? "var(--primary)" : "rgba(255,255,255,0.08)"}
+                stroke="var(--primary)"
+                strokeWidth={involved ? 0 : 1.2}
+                style={{ transition: "all 240ms ease" }}
+              />
+              <text
+                x={n.x}
+                y={n.y + 38}
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+                fontSize="9"
+                fill={involved ? "var(--primary)" : "rgba(255,255,255,0.5)"}
+                style={{ letterSpacing: "0.12em" }}
+              >
+                {n.label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <div className="absolute top-4 left-4">
+        <span className="inline-flex items-center gap-1.5 text-[0.6rem] font-mono uppercase tracking-wider text-paper-2/60">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          AGENT WORKFLOW · LIVE
+        </span>
       </div>
     </div>
   );
