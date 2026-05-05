@@ -107,52 +107,39 @@ export function EditorialPortrait() {
         } as React.CSSProperties
       }
     >
-      {/* Soft primary halo behind everything - bleeds out of the plate */}
+      {/* Soft primary halo behind the letters - the only background piece.
+          No more nested glass plate (was creating a frame-inside-frame). */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 65% 60% at 50% 45%, color-mix(in srgb, var(--primary) 22%, transparent) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 55% at 50% 50%, color-mix(in srgb, var(--primary) 22%, transparent) 0%, transparent 70%)",
         }}
       />
 
-      {/* Glass plate */}
+      {/* MJ letterforms - bold upright Instrument Sans (no italic, no
+          serif). Tighter letter-spacing pulls the M and J close so they
+          read as a unified mark. */}
       <div
-        aria-hidden="true"
-        className="mj-glass absolute rounded-3xl"
+        className="mj-letters relative font-sans select-none"
         style={{
-          inset: "10%",
-          background:
-            "color-mix(in srgb, var(--paper-2) 35%, transparent)",
-          border:
-            "1px solid color-mix(in srgb, var(--ink) 14%, transparent)",
-          backdropFilter: "blur(18px) saturate(140%)",
-          WebkitBackdropFilter: "blur(18px) saturate(140%)",
-          boxShadow:
-            "0 12px 40px -12px color-mix(in srgb, var(--primary) 25%, transparent), inset 0 1px 0 color-mix(in srgb, var(--paper-2) 50%, transparent)",
-        }}
-      />
-
-      {/* MJ letterforms */}
-      <div
-        className="mj-letters relative font-display select-none"
-        style={{
-          fontStyle: "italic",
+          fontWeight: 700,
           fontSize: "clamp(7rem, 16vw, 13rem)",
           lineHeight: 1,
-          letterSpacing: "-0.06em",
+          letterSpacing: "-0.08em",
         }}
       >
         MJ
       </div>
 
-      {/* Cursor-tracking spotlight */}
+      {/* Cursor-tracking spotlight - now covers the full stage since there's
+          no glass plate to clip it. Soft primary radial that follows the
+          cursor and screen-blends over the letters. */}
       <div
         aria-hidden="true"
-        className="mj-spotlight absolute pointer-events-none rounded-3xl"
+        className="mj-spotlight absolute inset-0 pointer-events-none"
         style={{
-          inset: "10%",
           background:
             "radial-gradient(circle 220px at calc(var(--mx) * 100%) calc(var(--my) * 100%), color-mix(in srgb, var(--primary) 38%, transparent), transparent 55%)",
           mixBlendMode: "screen",
