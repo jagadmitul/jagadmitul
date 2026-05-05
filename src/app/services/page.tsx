@@ -24,7 +24,7 @@ const ICONS = {
 } as const;
 
 export const metadata: Metadata = {
-  title: "Services — Mitul Jagad",
+  title: "Services - Mitul Jagad",
   description:
     "Six engineering services: AI agents, full-stack apps, performance optimization, auth & security, architecture, cloud & DevOps.",
 };
@@ -39,7 +39,7 @@ const ENGAGEMENTS = [
   },
   {
     name: "Build",
-    duration: "3–6 months",
+    duration: "3-6 months",
     price: "$450/day",
     description:
       "Embedded as senior engineer with your team. Full-stack, AI agents, performance, auth.",
@@ -71,11 +71,12 @@ export default function ServicesPage() {
               SERVICES
             </span>
             <h1 className="mt-2 text-3xl lg:text-4xl font-semibold text-ink leading-tight">
-              Six modes I work in —{" "}
-              <span className="text-primary">all production-grade.</span>
+              Six modes I work in.{" "}
+              <span className="text-primary">All production-grade.</span>
             </h1>
             <p className="mt-3 text-base text-ink-mute max-w-2xl">
-              Every service below comes with the same baseline: real metrics, no demos, written hand-off, and a 24h response SLA.
+              Every service below ships with real metrics, a written hand-off,
+              and a 24-hour response. No demos, no PowerPoints.
             </p>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- * Wraps a card so it tilts subtly toward the cursor — adds a sense of depth
+ * Wraps a card so it tilts subtly toward the cursor - adds a sense of depth
  * without being theatrical. Resets on mouse leave. Disabled under
  * reduced motion.
  */

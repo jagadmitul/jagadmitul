@@ -32,7 +32,7 @@ export const PALETTE_LABELS: Record<Palette, string> = {
 /**
  * Visual swatch for each palette in the dropdown / trigger pip.
  * Dark gets a half-and-half black/white moon-style fill via a CSS
- * gradient so it's visible against any background — pure-black on
+ * gradient so it's visible against any background - pure-black on
  * black trigger button was invisible.
  */
 export const PALETTE_SWATCH: Record<Palette, string> = {

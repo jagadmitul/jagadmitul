@@ -54,7 +54,7 @@ export function PaletteDropdown() {
           sideOffset={8}
           className="z-[80] min-w-[200px] rounded-xl border border-hairline bg-paper-2 p-1.5 shadow-2xl"
           style={{
-            // Solid bg always — bg-paper-2 alone can feel washed against the
+            // Solid bg always - bg-paper-2 alone can feel washed against the
             // ambient gradient in dark mode. Layered with paper-2 again for
             // extra opacity safety.
             backgroundColor: "var(--paper-2)",

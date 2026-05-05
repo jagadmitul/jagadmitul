@@ -31,7 +31,7 @@ export default function ContactPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const body = `Hi Mitul,\n\n${form.message}\n\nBudget: ${form.budget}\n\n— ${form.name}\n${form.email}`;
+    const body = `Hi Mitul,\n\n${form.message}\n\nBudget: ${form.budget}\n\n${form.name}\n${form.email}`;
     window.location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent(
       form.subject || "Project brief",
     )}&body=${encodeURIComponent(body)}`;
@@ -42,14 +42,14 @@ export default function ContactPage() {
   return (
     <PageShell>
       <main className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6 lg:auto-rows-[minmax(120px,auto)]">
-        {/* Col 1, rows 1-3 — IntroCard (matches home bento) */}
+        {/* Col 1, rows 1-3 - IntroCard (matches home bento) */}
         <ScrollReveal className="lg:row-span-3 h-full">
           <TiltCard max={5}>
             <IntroCard />
           </TiltCard>
         </ScrollReveal>
 
-        {/* Cols 2-3, rows 1-3 — main contact form (the headline element) */}
+        {/* Cols 2-3, rows 1-3 - main contact form (the headline element) */}
         <ScrollReveal className="lg:col-span-2 lg:row-span-3 h-full" delay={0.05}>
           <TiltCard max={3}>
             <div className="rounded-2xl bg-paper-2/85 backdrop-blur-xl border border-hairline p-6 lg:p-10 shadow-card h-full flex flex-col">
@@ -57,7 +57,7 @@ export default function ContactPage() {
                 CONTACT
               </span>
               <h1 className="mt-2 text-3xl lg:text-4xl font-semibold text-ink leading-tight">
-                Let&apos;s 👋 <span className="text-primary">Work Together</span>
+                Let&apos;s <span className="text-primary">work together</span>
               </h1>
               <p className="mt-3 text-base text-ink-mute max-w-2xl">
                 Send a few lines on what you&apos;re building, your stack, and
@@ -96,9 +96,9 @@ export default function ContactPage() {
                     onChange={(v) => setForm({ ...form, budget: v })}
                     options={[
                       { value: "", label: "Select range" },
-                      { value: "$2k-5k (consult)", label: "$2k–5k (1-week consult)" },
-                      { value: "$5k-15k (small build)", label: "$5k–15k (small build)" },
-                      { value: "$15k-50k (medium)", label: "$15k–50k (medium)" },
+                      { value: "$2k-5k (consult)", label: "$2k-5k (1-week consult)" },
+                      { value: "$5k-15k (small build)", label: "$5k-15k (small build)" },
+                      { value: "$15k-50k (medium)", label: "$15k-50k (medium)" },
                       { value: "$50k+ (long contract)", label: "$50k+ (long contract)" },
                       { value: "FT role", label: "Full-time role" },
                     ]}
@@ -203,13 +203,13 @@ export default function ContactPage() {
                 Open · {PROFILE.capacity}
               </p>
               <p className="text-xs text-ink-mute mt-2">
-                Senior contracts · 3–6 months · Right FT role
+                Senior contracts · 3-6 months · Right FT role
               </p>
             </div>
           </TiltCard>
         </ScrollReveal>
 
-        {/* Row 5: social/follow strip — 3 cards */}
+        {/* Row 5: social/follow strip - 3 cards */}
         <ScrollReveal className="h-full" delay={0.15}>
           <TiltCard max={5}>
             <a
@@ -336,7 +336,7 @@ function SelectField({
       <label className="block text-xs font-mono uppercase tracking-wider text-ink-mute mb-2">
         {label}
       </label>
-      {/* Custom select — strip native chevron with appearance-none, render
+      {/* Custom select - strip native chevron with appearance-none, render
           our own ChevronDown so it matches the design system in any palette. */}
       <div className="relative">
         <select

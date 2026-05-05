@@ -4,7 +4,7 @@ import { IntroCard } from "@/components/sections/IntroCard";
 import { ABOUT, EXPERIENCE, STATS } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "About — Mitul Jagad",
+  title: "About - Mitul Jagad",
   description:
     "Senior Full Stack Developer with 5+ years building production AI agents and full-stack systems. Open for contract.",
 };
@@ -27,8 +27,8 @@ export default function AboutPage() {
               ABOUT ME
             </span>
             <h1 className="mt-2 text-3xl lg:text-4xl font-semibold text-ink leading-tight">
-              The work, on the record —{" "}
-              <span className="text-primary">what it actually shipped.</span>
+              The work, on the record.{" "}
+              <span className="text-primary">What it actually shipped.</span>
             </h1>
 
             <div className="mt-6 space-y-4 text-base text-ink-mute leading-relaxed">
@@ -71,7 +71,7 @@ export default function AboutPage() {
               </ul>
             </div>
 
-            {/* Where I work best — replace the left-stripe notification look
+            {/* Where I work best - replace the left-stripe notification look
                 with a primary-tinted pull-quote card. Quote glyph + soft
                 gradient bg. Reads as editorial, not as an alert. */}
             <div

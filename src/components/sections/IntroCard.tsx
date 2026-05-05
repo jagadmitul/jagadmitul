@@ -6,7 +6,7 @@ import { PROFILE } from "@/lib/data";
 import { EditorialPortrait } from "@/components/visual/EditorialPortrait";
 
 /**
- * Intro card — the leftmost column of the home page. Now uses a clean
+ * Intro card - the leftmost column of the home page. Now uses a clean
  * professional gradient block + monogram instead of the (rejected) 3D blob,
  * and the tagline is hand-written without the laptop emoji.
  */
@@ -22,7 +22,7 @@ export function IntroCard() {
 
   return (
     <div className="rounded-2xl bg-paper-2/85 backdrop-blur-xl border border-hairline p-6 shadow-card h-full flex flex-col">
-      {/* Profile area — animated editorial line-art portrait. Strokes use
+      {/* Profile area - animated editorial line-art portrait. Strokes use
           var(--primary) so the portrait re-tints with every theme. */}
       <div className="aspect-[6/4] overflow-hidden rounded-xl relative">
         <div
@@ -52,8 +52,10 @@ export function IntroCard() {
         Mitul Jagad
       </h1>
       <p className="mt-2 text-base text-ink-mute leading-relaxed">
-        <span className="text-ink font-medium">Senior Full Stack Developer</span>{" "}
-        specializing in <span className="text-primary font-medium">AI agents</span> and workflow automation. {PROFILE.yearsExperience}+ years shipping production systems for SaaS &amp; FinTech startups.
+        <span className="text-ink font-medium">Senior Full Stack Developer</span>.
+        Six years shipping production for SaaS and FinTech teams. Lately
+        building <span className="text-primary font-medium">AI agents</span>{" "}
+        and workflow automations that have to actually run, not just demo.
       </p>
 
       <div className="mt-5 flex flex-wrap gap-2">

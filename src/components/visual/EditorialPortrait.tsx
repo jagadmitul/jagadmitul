@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Animated editorial line-art portrait — the original v1 design.
+ * Animated editorial line-art portrait - the original v1 design.
  *
  * Pure SVG line-art (hair, face, eyes, brows, nose, mouth, beard, collar)
  * stroked in var(--primary) so the portrait re-tints with every theme.
@@ -167,7 +167,7 @@ export function EditorialPortrait() {
           strokeWidth="2.4"
         />
 
-        {/* EYES — left */}
+        {/* EYES - left */}
         <g>
           <ellipse
             className={drawCls}
@@ -202,7 +202,7 @@ export function EditorialPortrait() {
           />
         </g>
 
-        {/* EYES — right */}
+        {/* EYES - right */}
         <g>
           <ellipse
             className={drawCls}

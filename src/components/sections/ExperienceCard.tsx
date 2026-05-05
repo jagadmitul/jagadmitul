@@ -4,7 +4,7 @@ import Image from "next/image";
 import { EXPERIENCE } from "@/lib/data";
 
 /**
- * Experience list — recreates the original portfolio's auto-scrolling
+ * Experience list - recreates the original portfolio's auto-scrolling
  * vertical list. Two copies of the entries are rendered back-to-back so
  * the CSS keyframe `scroll-y` can loop seamlessly. Pauses on hover.
  */
@@ -19,8 +19,8 @@ export function ExperienceCard() {
             WORK EXPERIENCE
           </span>
           <h2 className="mt-1 text-xl font-semibold text-ink">
-            5+ years across{" "}
-            <span className="text-primary">5 senior roles</span>
+            Building production{" "}
+            <span className="text-primary">since 2020</span>
           </h2>
         </div>
       </div>

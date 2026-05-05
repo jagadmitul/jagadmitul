@@ -7,7 +7,7 @@ import { GradientCover } from "@/components/visual/GradientCover";
 import { PROJECTS } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Works — Mitul Jagad",
+  title: "Works - Mitul Jagad",
   description:
     "Selected projects: AI workflow agents, enterprise SSO, SQL optimization, healthcare platforms, and more.",
 };
@@ -28,11 +28,11 @@ export default function PortfolioPage() {
               SELECTED WORK
             </span>
             <h1 className="mt-2 text-3xl lg:text-4xl font-semibold text-ink leading-tight">
-              Check out my latest{" "}
-              <span className="text-primary">projects</span>
+              Selected work,{" "}
+              <span className="text-primary">real metrics</span>
             </h1>
             <p className="mt-3 text-base text-ink-mute max-w-2xl">
-              Six shipped projects with real metrics — from AI agents and 100K-user platforms to SQL wins that turned 50-second queries into 4-second ones.
+              Six shipped projects - AI agents, a 100K-user SSO suite, the SQL win that turned 50-second queries into 4-second ones, and two consumer apps live on Google Play.
             </p>
 
             <div className="mt-8 space-y-4 lg:space-y-6">

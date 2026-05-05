@@ -5,7 +5,7 @@ import { useReducedMotion } from "@/lib/reduced-motion";
 
 /**
  * Thin progress bar pinned to the top of the viewport that fills as the
- * page is scrolled. Pure motion utility — no JS overhead beyond Motion's
+ * page is scrolled. Pure motion utility - no JS overhead beyond Motion's
  * scroll listener.
  */
 export function ScrollProgress() {

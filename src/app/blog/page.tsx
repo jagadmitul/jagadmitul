@@ -7,7 +7,7 @@ import { GradientCover } from "@/components/visual/GradientCover";
 import { ARTICLES } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Blog — Mitul Jagad",
+  title: "Blog - Mitul Jagad",
   description:
     "Articles on AI engineering, performance optimization, and building production systems.",
 };
@@ -28,11 +28,11 @@ export default function BlogPage() {
               WRITING
             </span>
             <h1 className="mt-2 text-3xl lg:text-4xl font-semibold text-ink leading-tight">
-              My recent articles &{" "}
-              <span className="text-primary">publications</span>
+              Notes from{" "}
+              <span className="text-primary">production</span>
             </h1>
             <p className="mt-3 text-base text-ink-mute max-w-2xl">
-              Notes from production — AI agents, performance work, what actually breaks at scale.
+              AI agents, performance work, the patterns that hold up - and the ones that don&apos;t.
             </p>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">

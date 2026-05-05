@@ -1,7 +1,7 @@
 import { Quote } from "lucide-react";
 
 /**
- * Testimonials card — sits in column 2 below SkillsCard to balance
+ * Testimonials card - sits in column 2 below SkillsCard to balance
  * column heights with column 3. Two short quotes with attributed roles.
  *
  * Note for Mitul on first deploy: replace these with real LinkedIn
@@ -11,13 +11,13 @@ import { Quote } from "lucide-react";
 const TESTIMONIALS = [
   {
     quote:
-      "Mitul is the kind of senior you give the hardest problem to and don't hear from again until it's solved. The SQL win speaks for itself — he reduced a query from 50 seconds to under 4 without an architectural rewrite.",
+      "Mitul is the kind of senior you give the hardest problem to and don't hear from again until it's solved. The SQL win speaks for itself - he reduced a query from 50 seconds to under 4 without an architectural rewrite.",
     author: "Engineering Lead",
     company: "Production SaaS · 2023",
   },
   {
     quote:
-      "Shipped our SSO system across 8 products without a single auth ticket in the first month post-launch. Quiet, measured work — exactly what production engineering should look like.",
+      "Shipped our SSO system across 8 products without a single auth ticket in the first month post-launch. Quiet, measured work - exactly what production engineering should look like.",
     author: "Product Director",
     company: "Healthcare Platform · 2024",
   },

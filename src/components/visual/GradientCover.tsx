@@ -13,7 +13,7 @@ type Props = {
  * Auto-generated gradient cover for a project / article. Replaces the
  * generic templated `project-1.png` / `blog-img-1.jpg` images with a
  * deterministic gradient seeded by the slug, plus the title and tag set
- * over it — same idea as Vercel's OG image generator, scoped to the card.
+ * over it - same idea as Vercel's OG image generator, scoped to the card.
  *
  * No external images, no template look. Each cover is unique per slug.
  */

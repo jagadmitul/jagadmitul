@@ -27,7 +27,7 @@ function useMediaQuery(query: string): boolean {
 type Ripple = { id: number; x: number; y: number };
 
 // Number of trailing droplets behind the head. Reduced from 6 → 4 after
-// perf review — each droplet is a node the SVG goo filter blurs + merges,
+// perf review - each droplet is a node the SVG goo filter blurs + merges,
 // and the filter cost is roughly linear in droplet count.
 const TRAIL_COUNT = 4;
 
@@ -89,7 +89,7 @@ export function CustomCursor() {
       const hasLabel = !!labelStrRef.current;
       const tightening = isHover ? 0.55 : 0;
 
-      // Track the largest delta this frame — if every node is essentially
+      // Track the largest delta this frame - if every node is essentially
       // settled (delta < 0.15px), we pause the loop until the next mousemove.
       let maxDelta = 0;
 
@@ -134,7 +134,7 @@ export function CustomCursor() {
         labelRef.current.style.transform = `translate3d(${head.x + 22}px, ${head.y - 14}px, 0)`;
       }
 
-      // Idle gate — pause the loop when the cursor has fully caught up.
+      // Idle gate - pause the loop when the cursor has fully caught up.
       // Hover state changes also wake the loop via the deps array on the
       // outer effect (it tears down + re-runs).
       if (maxDelta < 0.15) {
@@ -210,7 +210,7 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* SVG filter defs — fixed-position 0×0 svg so it doesn't take layout
+      {/* SVG filter defs - fixed-position 0×0 svg so it doesn't take layout
           space. The gooey filter blurs all children of `.cursor-goo` and then
           stamps a hard alpha threshold so anything close enough merges into
           one liquid blob. */}
@@ -226,7 +226,7 @@ export function CustomCursor() {
         }}
       >
         <defs>
-          {/* Smaller stdDeviation (was 6, now 4) — Gaussian blur is the
+          {/* Smaller stdDeviation (was 6, now 4) - Gaussian blur is the
               filter's hot path and cost scales with the kernel size. The
               feComposite stage is dropped because the alpha threshold
               already gives crisp edges; one less filter pass per frame. */}
@@ -244,7 +244,7 @@ export function CustomCursor() {
         </defs>
       </svg>
 
-      {/* Goo wrapper — full-viewport, non-interactive. Holds head + trail
+      {/* Goo wrapper - full-viewport, non-interactive. Holds head + trail
           droplets so the SVG filter can merge them. */}
       <div
         aria-hidden="true"
@@ -253,7 +253,7 @@ export function CustomCursor() {
           filter: "url(#cursor-goo)",
         }}
       >
-        {/* Head droplet — solid primary fill */}
+        {/* Head droplet - solid primary fill */}
         <div
           ref={headRef}
           className="absolute top-0 left-0 rounded-full"
@@ -264,7 +264,7 @@ export function CustomCursor() {
             willChange: "transform, width, height",
           }}
         />
-        {/* Trail droplets — same primary fill, gooey filter merges them
+        {/* Trail droplets - same primary fill, gooey filter merges them
             into the head so they read as one liquid ribbon */}
         {Array.from({ length: TRAIL_COUNT }).map((_, i) => (
           <div
@@ -281,7 +281,7 @@ export function CustomCursor() {
         ))}
       </div>
 
-      {/* Label pill — sits outside the goo wrapper so text is sharp.
+      {/* Label pill - sits outside the goo wrapper so text is sharp.
           Position is updated per-frame in the rAF loop. */}
       <div
         ref={labelRef}

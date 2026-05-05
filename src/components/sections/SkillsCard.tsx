@@ -8,9 +8,9 @@ import {
 import { FaAws } from "react-icons/fa6";
 
 /**
- * The "expert area" card — Mitul's six core production tools, displayed
+ * The "expert area" card - Mitul's six core production tools, displayed
  * in the same nested-tile layout as the original portfolio. The chip-cloud
- * "ALSO SHIPS WITH" section was removed — it was making column 2 visibly
+ * "ALSO SHIPS WITH" section was removed - it was making column 2 visibly
  * taller than the others and felt cluttered.
  */
 const EXPERT_TILES = [
@@ -35,14 +35,19 @@ export function SkillsCard() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 flex-1 content-center">
+      {/* `grid-rows-2` + `flex-1` makes the 3x2 grid stretch to fill the
+          card's remaining vertical space. Each tile is `flex flex-col` with
+          a `flex-1` icon box, so the icon area grows and the name pins to
+          the bottom - no centered grid + dead space above/below the
+          tile cluster like the previous content-center version. */}
+      <div className="grid grid-cols-3 grid-rows-2 gap-2 flex-1">
         {EXPERT_TILES.map((tool) => (
           <div
             key={tool.name}
             data-cursor-hover
-            className="rounded-2xl bg-paper p-2 md:p-3 text-center group hover:shadow-card transition cursor-default"
+            className="rounded-2xl bg-paper p-2 md:p-3 text-center group hover:shadow-card transition cursor-default flex flex-col"
           >
-            <div className="grid place-content-center rounded-lg bg-paper-2 p-5 lg:p-6 group-hover:scale-110 transition-transform">
+            <div className="grid place-content-center rounded-lg bg-paper-2 group-hover:scale-110 transition-transform flex-1">
               <tool.Icon size={32} color={tool.color} />
             </div>
             <p className="mt-2 text-xs font-medium text-ink">{tool.name}</p>

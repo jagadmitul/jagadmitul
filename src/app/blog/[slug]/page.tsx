@@ -5,7 +5,7 @@ import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react";
 import { PageShell } from "@/components/chrome/PageShell";
 import { IntroCard } from "@/components/sections/IntroCard";
 import { GradientCover } from "@/components/visual/GradientCover";
-import { ARTICLES } from "@/lib/data";
+import { ARTICLES, type ArticleBlock } from "@/lib/data";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -20,7 +20,7 @@ export async function generateMetadata({
   const article = ARTICLES.find((a) => a.slug === slug);
   if (!article) return { title: "Article not found" };
   return {
-    title: `${article.title} — Mitul Jagad`,
+    title: `${article.title} - Mitul Jagad`,
     description: article.excerpt,
   };
 }
@@ -47,9 +47,12 @@ export default async function ArticlePage({
 
         <article className="lg:col-span-2">
           <div className="rounded-2xl bg-paper-2/85 backdrop-blur-xl border border-hairline p-6 lg:p-10 shadow-card">
+            {/* Back link - `flex w-fit` so it occupies its own line. The
+                previous `inline-flex` made it sit beside the category pill
+                because both were inline-level elements. */}
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-ink-mute hover:text-primary transition mb-6"
+              className="flex w-fit items-center gap-2 text-xs font-mono uppercase tracking-wider text-ink-mute hover:text-primary transition mb-6"
             >
               <ArrowLeft size={14} />
               ALL ARTICLES
@@ -82,46 +85,15 @@ export default async function ArticlePage({
               className="mt-8 aspect-video rounded-2xl"
             />
 
-            <div className="mt-10 prose-content space-y-6">
-              <p className="text-lg text-ink-mute leading-relaxed">
+            <div className="mt-10 prose-content space-y-5">
+              {/* Lede paragraph (the excerpt) - bigger than the body, sets the tone */}
+              <p className="text-lg text-ink-mute leading-relaxed font-medium">
                 {article.excerpt}
               </p>
-              <div
-                className="p-6 lg:p-8 rounded-2xl border border-primary/20 relative overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, transparent), color-mix(in srgb, var(--primary) 4%, transparent) 60%, transparent)",
-                }}
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute top-3 right-4 font-display select-none pointer-events-none"
-                  style={{
-                    fontStyle: "italic",
-                    fontWeight: 400,
-                    fontSize: "6rem",
-                    lineHeight: 1,
-                    color: "var(--primary)",
-                    opacity: 0.22,
-                  }}
-                >
-                  &ldquo;
-                </span>
-                <div className="text-[0.7rem] font-mono uppercase tracking-[0.18em] text-primary mb-3">
-                  PUBLISHED ON LINKEDIN
-                </div>
-                <p className="text-sm text-ink-mute italic leading-relaxed">
-                  This article is published in full on Mitul&apos;s LinkedIn — read the complete piece there. The summary above is a sourced excerpt.
-                </p>
-                <a
-                  href="https://www.linkedin.com/in/jagadmitul/recent-activity/all/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 text-sm text-primary hover:underline"
-                >
-                  Read on LinkedIn →
-                </a>
-              </div>
+              {/* Body - rendered from the structured ArticleBlock array */}
+              {article.body.map((block, i) => (
+                <BlockRenderer key={i} block={block} />
+              ))}
             </div>
 
             <div className="mt-10 pt-8 border-t border-hairline flex items-center justify-between gap-4 flex-wrap">
@@ -185,4 +157,58 @@ export default async function ArticlePage({
       </main>
     </PageShell>
   );
+}
+
+/**
+ * Renders one ArticleBlock from the structured body. Keeps the article
+ * page narrow + typed so we don't need MDX or a markdown renderer for
+ * what is, in practice, a small handful of block types.
+ */
+function BlockRenderer({ block }: { block: ArticleBlock }) {
+  switch (block.type) {
+    case "p":
+      return (
+        <p className="text-base text-ink leading-relaxed">{block.text}</p>
+      );
+    case "h2":
+      return (
+        <h2 className="text-2xl font-semibold text-ink leading-tight mt-8 mb-1">
+          {block.text}
+        </h2>
+      );
+    case "h3":
+      return (
+        <h3 className="text-lg font-semibold text-ink leading-tight mt-6 mb-1">
+          {block.text}
+        </h3>
+      );
+    case "ul":
+      return (
+        <ul className="list-disc pl-6 space-y-2 text-base text-ink leading-relaxed">
+          {block.items.map((it, i) => (
+            <li key={i}>{it}</li>
+          ))}
+        </ul>
+      );
+    case "ol":
+      return (
+        <ol className="list-decimal pl-6 space-y-2 text-base text-ink leading-relaxed">
+          {block.items.map((it, i) => (
+            <li key={i}>{it}</li>
+          ))}
+        </ol>
+      );
+    case "code":
+      return (
+        <pre className="rounded-xl bg-ink/95 text-paper p-4 lg:p-5 overflow-x-auto text-sm font-mono leading-relaxed">
+          <code>{block.text}</code>
+        </pre>
+      );
+    case "quote":
+      return (
+        <blockquote className="border-l-2 border-primary pl-4 italic text-ink-mute leading-relaxed">
+          {block.text}
+        </blockquote>
+      );
+  }
 }

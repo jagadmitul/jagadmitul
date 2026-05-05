@@ -1,7 +1,7 @@
 import { Gauge, Eye, Users } from "lucide-react";
 
 /**
- * "How I work" card — three short principles that frame how Mitul
+ * "How I work" card - three short principles that frame how Mitul
  * approaches engineering work. Sits in column 1 below NowCard to keep
  * column heights balanced with column 3 (which has 3 cards).
  */

@@ -3,7 +3,7 @@
 import { CountUp } from "@/components/motion/CountUp";
 
 /**
- * Animated stats card — fills the empty space below ProjectsCard in column 3
+ * Animated stats card - fills the empty space below ProjectsCard in column 3
  * of the home page. Four animated metrics that count up when scrolled into
  * view: years shipping, p99 win, users served, MFE bottleneck cut.
  */
@@ -66,7 +66,7 @@ export function StatsCard() {
 
       <div className="mt-auto pt-4 border-t border-hairline flex items-center justify-between">
         <span className="text-[0.65rem] font-mono uppercase tracking-wider text-ink-mute">
-          PROD-VERIFIED · 2020–2026
+          PROD-VERIFIED · 2020-2026
         </span>
         <span className="inline-flex items-center gap-1.5 text-[0.65rem] font-mono text-primary">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />

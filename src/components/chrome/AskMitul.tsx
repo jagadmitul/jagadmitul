@@ -31,7 +31,7 @@ export function AskMitul() {
   const endRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-scroll using a sentinel element. Only runs while the dialog is
-  // OPEN — Radix renders Dialog.Content into a Portal even when closed,
+  // OPEN - Radix renders Dialog.Content into a Portal even when closed,
   // so calling scrollIntoView() on the sentinel was nudging the WINDOW
   // (causing the visible page to scroll slightly on every refresh). Now
   // gated on `open`, and we use scrollTop directly on the chat scroller
@@ -167,7 +167,7 @@ export function AskMitul() {
               </Dialog.Close>
             </div>
 
-            {/* BODY — `data-lenis-prevent` opts this scroll container out
+            {/* BODY - `data-lenis-prevent` opts this scroll container out
                 of Lenis's site-wide smooth-scroll, so the user can scroll
                 inside the chat with mouse wheel / trackpad normally. */}
             <div
@@ -239,7 +239,7 @@ export function AskMitul() {
                       exit={reduced ? undefined : { opacity: 0, scale: 0.96 }}
                       transition={baseTransition}
                       onAnimationComplete={() => {
-                        // Same reason as the effect above — scroll the chat
+                        // Same reason as the effect above - scroll the chat
                         // body's scrollTop directly instead of scrollIntoView,
                         // which can nudge the parent window.
                         const s = scrollRef.current;
@@ -254,7 +254,7 @@ export function AskMitul() {
                   );
                 })}
               </AnimatePresence>
-              {/* Sentinel — auto-scroll target */}
+              {/* Sentinel - auto-scroll target */}
               <div ref={endRef} aria-hidden="true" />
             </div>
 

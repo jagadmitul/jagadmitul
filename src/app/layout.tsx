@@ -8,7 +8,7 @@ import { Background3D } from "@/components/visual/Background3D";
 import { CustomCursor } from "@/components/visual/CustomCursor";
 import { ScrollProgress } from "@/components/visual/ScrollProgress";
 
-// Instrument Sans — UI sans with subtle character. Designed by Instrument
+// Instrument Sans - UI sans with subtle character. Designed by Instrument
 // for use with Instrument Serif. Distinctive without being loud, and
 // specifically NOT in the Inter/Geist/Manrope AI-default rotation.
 const instrumentSans = Instrument_Sans({
@@ -19,7 +19,7 @@ const instrumentSans = Instrument_Sans({
   display: "swap",
 });
 
-// Instrument Serif — display + italic accents. Big personality in the
+// Instrument Serif - display + italic accents. Big personality in the
 // italic; paired with Instrument Sans by design.
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
@@ -37,12 +37,12 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mitul Jagad — Senior Full Stack Developer & AI Agents Engineer",
+  title: "Mitul Jagad - Senior Full Stack Developer & AI Agents Engineer",
   description:
     "Senior Full Stack Developer with 5+ years building production AI agents and full-stack systems for SaaS and FinTech startups. Open for contract work.",
   metadataBase: new URL("https://jagadmitul.com"),
   openGraph: {
-    title: "Mitul Jagad — Senior Full Stack & AI Agents Engineer",
+    title: "Mitul Jagad - Senior Full Stack & AI Agents Engineer",
     description:
       "Production AI agents, workflow automation, and full-stack systems. Available for contract.",
     type: "website",

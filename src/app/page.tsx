@@ -11,10 +11,10 @@ import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 
 /**
- * Home — true bento grid using CSS Grid row-spans. Six cards, two per
+ * Home - true bento grid using CSS Grid row-spans. Six cards, two per
  * column (top tall + bottom short). Each "tall" card spans 3 rows and
  * each "short" card spans 2 rows of an auto-sized grid, so all three
- * columns end at the same total height — columns visually aligned, no
+ * columns end at the same total height - columns visually aligned, no
  * gaps between row 1 and row 2 of any column.
  *
  * Direct grid items (not nested in column flex-cols) so each card gets
@@ -61,7 +61,7 @@ export default function Home() {
           </TiltCard>
         </ScrollReveal>
 
-        {/* Bottom CTA row — Services span 2 cols, CTA span 1 */}
+        {/* Bottom CTA row - Services span 2 cols, CTA span 1 */}
         <ScrollReveal className="lg:col-span-2 h-full" delay={0.05}>
           <ServicesCard limit={6} />
         </ScrollReveal>

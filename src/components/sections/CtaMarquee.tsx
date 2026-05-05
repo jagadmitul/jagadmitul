@@ -4,12 +4,12 @@ import { ArrowUpRight } from "lucide-react";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 
 const PHRASES = [
-  "AVAILABLE FOR HIRE",
+  "OPEN FOR SENIOR CONTRACTS",
   "SHIPPING AI AGENTS",
   "READING EXPLAIN PLANS",
-  "CRAFTING DIGITAL EXPERIENCES",
+  "TYPESCRIPT EVERYWHERE",
   "SAAS · FINTECH · HEALTHTECH",
-  "REMOTE — ALL TIMEZONES",
+  "REMOTE · ALL TIMEZONES",
 ];
 
 export function CtaMarquee() {
@@ -38,8 +38,8 @@ export function CtaMarquee() {
           OPEN LINE
         </span>
         <h2 className="text-3xl lg:text-4xl font-semibold leading-tight text-paper">
-          Let&apos;s 👋{" "}
-          <span style={{ color: "var(--primary)" }}>Work Together</span>
+          Let&apos;s{" "}
+          <span style={{ color: "var(--primary)" }}>work together</span>
         </h2>
         <p className="mt-3 text-sm text-paper/70 max-w-xs">
           Got a system that needs to hold up under load? I reply within 24 hours.

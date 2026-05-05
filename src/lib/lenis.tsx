@@ -6,7 +6,7 @@ import { useReducedMotion } from "@/lib/reduced-motion";
 
 /**
  * Lenis smooth-scroll provider. Tuned for a long, buttery, slightly heavy
- * feel — the previous 1.15s duration felt tight; this is calmer and more
+ * feel - the previous 1.15s duration felt tight; this is calmer and more
  * editorial. Disabled entirely under `prefers-reduced-motion`.
  */
 export function LenisProvider({ children }: { children: React.ReactNode }) {
@@ -26,7 +26,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
     });
-    // Tell Lenis its current scroll is exactly 0 — overrides any value it
+    // Tell Lenis its current scroll is exactly 0 - overrides any value it
     // would have read from window.scrollY.
     lenis.scrollTo(0, { immediate: true });
     let frameId = 0;

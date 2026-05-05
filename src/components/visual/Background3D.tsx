@@ -9,7 +9,7 @@ import { useReducedMotion } from "@/lib/reduced-motion";
 /**
  * Active 3D layer that sits on top of the global CSS ambient gradient.
  * Three blobs whose colors follow the active palette via three CSS
- * variables (--ambient-1/2/3) — keeps the dark-mode gradient feel from
+ * variables (--ambient-1/2/3) - keeps the dark-mode gradient feel from
  * the original portfolio AND lets each theme retint the WebGL layer too.
  */
 

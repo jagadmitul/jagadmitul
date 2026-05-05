@@ -13,7 +13,7 @@ type Props = {
 };
 
 /**
- * Magnetic button with a tight activation radius — only pulls toward the
+ * Magnetic button with a tight activation radius - only pulls toward the
  * cursor when the cursor is hovering directly over (or 1.5× the button's
  * own size away from) the element. Springs back to rest immediately on
  * leave. Disabled under reduced motion.
@@ -55,7 +55,7 @@ export function MagneticButton({
       const r = el.getBoundingClientRect();
       const dx = e.clientX - (r.left + r.width / 2);
       const dy = e.clientY - (r.top + r.height / 2);
-      // Tight activation zone — only react when cursor is within the
+      // Tight activation zone - only react when cursor is within the
       // button's own footprint expanded slightly.
       const insideX = Math.abs(dx) < r.width * 0.7;
       const insideY = Math.abs(dy) < r.height * 1.1;
