@@ -843,31 +843,49 @@ export const CHATBOT_PROMPTS = [
  */
 const EXTRA_INTENTS: Record<string, string> = {
   greeting:
-    "Hey there 👋 I'm Mitul - a senior full-stack & AI engineer based in Surat, India. Pick a quick prompt below or ask me anything about my work, pricing, availability, or stack.",
+    "Hi there 👋 I'm Mitul - a senior full-stack & AI engineer based in Surat, India. Feel free to pick a quick prompt below or ask me anything about my work, pricing, availability, or stack. I also reply in Hindi, Gujarati, French, Spanish, or German if that's easier for you.",
   identity:
     "I'm Mitul Jagad - senior full-stack engineer, six years of shipping production systems for SaaS / FinTech / HealthTech startups across the US, UK, AU and Israel. Lots of AI agent and workflow automation work alongside the rest of the stack. Recent: enterprise SSO across a 10+ product suite at MedChron.AI (100K+ users), 92% SQL latency win at TAPUZ, and two live consumer apps (JinRaag + JinRoop) on Google Play.",
   what:
     "I build the agents, backends, and auth systems that have to actually work in prod - LangGraph multi-step pipelines, performance-critical APIs, enterprise SSO, full-stack SaaS. Mostly 3-6 month embedded senior contracts. Open to the right full-time senior / staff role too.",
   hire:
-    "Yes - I'm currently open for senior engagements (3-6 month contracts or the right full-time role). Around 30 hours/week of capacity. Send a short brief to jagadmitul@gmail.com and I'll get back to you within 24 hours.",
+    "Yes, I'm currently open for senior engagements (3-6 month contracts or the right full-time role). Around 30 hours/week of capacity. Feel free to send a short brief to jagadmitul@gmail.com and I'll get back to you within 24 hours.",
   thanks:
-    "You're welcome 🙌 - anything else I can answer? Otherwise jagadmitul@gmail.com is the fastest way to reach me directly.",
+    "You're very welcome - happy to help. Anything else I can answer? Otherwise jagadmitul@gmail.com is the fastest way to reach me directly.",
   bye:
-    "Take care 👋 - jagadmitul@gmail.com is always the fastest way to reach me directly.",
+    "Take care - jagadmitul@gmail.com is always the fastest way to reach me directly.",
   help:
-    "Sure! I can answer questions about my pricing, availability, tech stack, recent work, AI agent specialism, location, or how to start an engagement. Pick a prompt below or just type your question.",
+    "Of course - I can answer questions about my pricing, availability, tech stack, recent work, AI agent specialism, location, or how to start an engagement. Feel free to pick a prompt below, or type your question. I respond in English, Hindi, Gujarati, French, Spanish, or German.",
   resume:
     "You can grab my resume from the Resume button on the homepage, or download it directly: jagadmitul.vercel.app/resume.pdf",
   social:
     "GitHub: github.com/jagadmitul · LinkedIn: linkedin.com/in/jagadmitul · Email: jagadmitul@gmail.com - I reply within 24 hours.",
-  // Casual Hinglish / Gujarati opener - covers "kaisa hai", "kem cho",
-  // "bhai sab thik", "yaar", etc. Replies in mixed Hindi/Gujarati/English
-  // because that's how Mitul actually talks to friends.
-  casual:
-    "Arre bhai, sab badhiya 🙌 - kaam chal raha hai, agents ship ho rahe hain. Tu bata, koi specific question hai? Pricing, work, stack, AI agents - neeche ek prompt pick kar le ya seedha jagadmitul@gmail.com pe likh de.",
-  // Explicit "answer in hindi/gujarati" request
+
+  // ─── Multi-language casual replies ─────────────────────────────────
+  // Triggered when the visitor uses a greeting / casual phrase in that
+  // specific language. Each reply uses the formal/respectful register
+  // (Hindi "aap", Gujarati "tame", French "vous", Spanish "usted",
+  // German "Sie") because the visitor could be a recruiter, client, or
+  // anyone professional - tone needs to land warm but never chummy.
+
+  casual_hi:
+    "Namaste 🙏 Sab badhiya hai - kaam chal raha hai, naye projects bhi shuru kiye hain. Aap kya jaanna chahenge - pricing, availability, tech stack, ya recent work? Niche prompts hain, athva jagadmitul@gmail.com par message kar dijiye, 24 hours mein reply kar deta hoon.",
+
+  casual_gu:
+    "Namaste 🙏 Saaru chu, kaam pan saaru chale che. Tame shu jaanva mango cho - pricing, availability, tech stack, ke recent work? Niche prompts che, athva jagadmitul@gmail.com par mail karjo - 24 kalak ma jawab aapis.",
+
+  casual_fr:
+    "Bonjour 👋 Tout va bien - je continue à livrer des projets. Que souhaitez-vous savoir : tarifs, disponibilité, stack technique, ou travaux récents ? Vous trouverez les questions ci-dessous, ou vous pouvez m'écrire à jagadmitul@gmail.com - je réponds sous 24 heures.",
+
+  casual_es:
+    "¡Hola! 👋 Todo va bien - sigo enviando proyectos a producción. ¿Qué le gustaría saber: tarifas, disponibilidad, stack técnico, o trabajos recientes? Abajo están las preguntas frecuentes, o puede escribirme a jagadmitul@gmail.com - respondo en menos de 24 horas.",
+
+  casual_de:
+    "Hallo 👋 Alles läuft gut - ich liefere weiterhin Projekte aus. Was möchten Sie wissen: Preise, Verfügbarkeit, Tech-Stack, oder aktuelle Arbeiten? Unten finden Sie die häufigen Fragen, oder Sie können mir an jagadmitul@gmail.com schreiben - ich antworte innerhalb von 24 Stunden.",
+
+  // Explicit "what languages do you support" request
   language:
-    "Haan haan, samjho ho gaya 😄 - short jawab Hindi/Gujarati mein bhi de sakta hoon, but pricing, stack, work jaisi serious cheezein clarity ke liye English mein hi rakhta hoon. Tu bata, kya jaanna hai?",
+    "I'm happy to chat in English (default), Hindi, Gujarati, French, Spanish, or German - just write in whichever feels easiest and I'll pick up the language from there. For specific topics like pricing, stack, or recent work I keep the answer in English so the details stay precise.",
 };
 
 const CHATBOT_KEYWORDS: Record<string, string> = {
@@ -965,9 +983,14 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   afternoon: "greeting",
   evening: "greeting",
   greetings: "greeting",
-  namaste: "greeting",
-  namaskar: "greeting",
-  salaam: "greeting",
+  bro: "greeting",
+  dude: "greeting",
+  re: "greeting",
+  // Indian greetings - intentionally route to the language-aware Hindi
+  // intent so the reply lands warm in the visitor's likely register.
+  namaste: "casual_hi",
+  namaskar: "casual_hi",
+  salaam: "casual_hi",
   who: "identity",
   yourself: "identity",
   about: "identity",
@@ -1000,55 +1023,99 @@ const CHATBOT_KEYWORDS: Record<string, string> = {
   linkedin: "social",
   twitter: "social",
   social: "social",
-  // Hinglish + Gujarati casual openers / fillers - everything below maps
-  // to the `casual` intent which replies in mixed Hindi/Gujarati/English.
-  bhai: "casual",
-  bhaiya: "casual",
-  bro: "casual",
-  yaar: "casual",
-  dost: "casual",
-  dude: "casual",
-  kaisa: "casual",
-  kaise: "casual",
-  kaisi: "casual",
-  hai: "casual",
-  ho: "casual",
-  kya: "casual",
-  kyu: "casual",
-  kyun: "casual",
-  theek: "casual",
-  thik: "casual",
-  sahi: "casual",
-  achha: "casual",
-  accha: "casual",
-  badhiya: "casual",
-  badhia: "casual",
-  baki: "casual",
-  baaki: "casual",
-  sab: "casual",
-  sabkuch: "casual",
-  re: "casual",
-  arre: "casual",
-  arey: "casual",
-  haan: "casual",
-  nahi: "casual",
-  // Gujarati
-  kem: "casual",
-  cho: "casual",
-  che: "casual",
-  su: "casual",
-  saru: "casual",
-  saaru: "casual",
-  mast: "casual",
-  badhu: "casual",
-  pan: "casual",
-  // Explicit "switch to hindi/gujarati" requests
+  // ─── Hindi casual triggers (replies in respectful Hindi / "aap" form) ───
+  bhai: "casual_hi",
+  bhaiya: "casual_hi",
+  yaar: "casual_hi",
+  dost: "casual_hi",
+  kaisa: "casual_hi",
+  kaise: "casual_hi",
+  kaisi: "casual_hi",
+  haal: "casual_hi",
+  hai: "casual_hi",
+  ho: "casual_hi",
+  kya: "casual_hi",
+  kyu: "casual_hi",
+  kyun: "casual_hi",
+  theek: "casual_hi",
+  thik: "casual_hi",
+  sahi: "casual_hi",
+  achha: "casual_hi",
+  accha: "casual_hi",
+  badhiya: "casual_hi",
+  badhia: "casual_hi",
+  baki: "casual_hi",
+  baaki: "casual_hi",
+  sab: "casual_hi",
+  sabkuch: "casual_hi",
+  arre: "casual_hi",
+  arey: "casual_hi",
+  haan: "casual_hi",
+  nahi: "casual_hi",
+
+  // ─── Gujarati casual triggers (replies in respectful Gujarati / "tame") ───
+  kem: "casual_gu",
+  cho: "casual_gu",
+  che: "casual_gu",
+  chhe: "casual_gu",
+  shu: "casual_gu",
+  saru: "casual_gu",
+  saaru: "casual_gu",
+  mast: "casual_gu",
+  majama: "casual_gu",
+  badhu: "casual_gu",
+  pan: "casual_gu",
+  tame: "casual_gu",
+  khabar: "casual_gu",
+  jaanva: "casual_gu",
+
+  // ─── French casual triggers ───
+  bonjour: "casual_fr",
+  bonsoir: "casual_fr",
+  salut: "casual_fr",
+  merci: "casual_fr",
+  comment: "casual_fr",
+  ça: "casual_fr",
+  vais: "casual_fr",
+
+  // ─── Spanish casual triggers ───
+  hola: "casual_es",
+  buenos: "casual_es",
+  buenas: "casual_es",
+  gracias: "casual_es",
+  qué: "casual_es",
+  estás: "casual_es",
+  estas: "casual_es",
+  tal: "casual_es",
+
+  // ─── German casual triggers ───
+  hallo: "casual_de",
+  guten: "casual_de",
+  tag: "casual_de",
+  danke: "casual_de",
+  geht: "casual_de",
+
+  // ─── Explicit "do you speak X / what languages" requests ───
   hindi: "language",
   hinglish: "language",
   gujarati: "language",
   gujju: "language",
   desi: "language",
   bharat: "language",
+  french: "language",
+  français: "language",
+  francais: "language",
+  spanish: "language",
+  español: "language",
+  espanol: "language",
+  german: "language",
+  deutsch: "language",
+  multilingual: "language",
+  languages: "language",
+  polyglot: "language",
+  translate: "language",
+  speak: "language",
+  respond: "language",
 };
 
 const CHATBOT_FALLBACK =

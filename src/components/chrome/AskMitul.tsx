@@ -16,7 +16,7 @@ type Turn =
 const INTRO: Turn = {
   kind: "intro",
   id: "intro",
-  text: "Hey 👋 Pick a question below or type your own. For anything more specific, drop me an email and I'll personally reply within 24 hours.",
+  text: "Hi there 👋 Feel free to pick a question below, or type your own — in English, Hindi, Gujarati, French, Spanish, or German. I'll reply in whichever language you write in. For anything specific, jagadmitul@gmail.com gets you a personal reply within 24 hours.",
 };
 
 let turnId = 0;
