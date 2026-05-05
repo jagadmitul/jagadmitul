@@ -118,16 +118,17 @@ export function EditorialPortrait() {
         }}
       />
 
-      {/* Calligraphic line-art MJ - three sequenced strokes drawn on like
-          a signature: M first, a baseline arc connecting M's bottom-right
-          to J's bottom-left (the calligraphic flourish), then J with its
-          hook. Stroked in primary, rounded caps, no font dependency.
-          The mj-stroke class on each path drives the stagger via CSS. */}
+      {/* Signature-style MJ - thin flowing strokes, all smooth curves
+          (no sharp angles), drawn on in sequence like a real signature.
+          Three strokes: M as one continuous cursive shape, a thin
+          baseline flourish connecting the letters, J descending with a
+          hook. ~3px stroke - the elegant weight, not the chunky one. */}
       <svg
         className="mj-letters relative select-none"
-        viewBox="0 0 280 140"
+        viewBox="0 0 280 110"
         fill="none"
         stroke="var(--primary)"
+        strokeWidth="3"
         strokeLinejoin="round"
         strokeLinecap="round"
         style={{
@@ -137,27 +138,32 @@ export function EditorialPortrait() {
         }}
         aria-label="Mitul Jagad monogram"
       >
-        {/* M - 4 angular strokes meeting at sharp peaks */}
+        {/* M as a single flowing cursive stroke - two smooth peaks with
+            curves at the bottom (not angular hairpin valleys). */}
         <path
           className="mj-stroke mj-stroke-1"
-          d="M 20 128 L 20 16 L 75 92 L 130 16 L 130 128"
-          strokeWidth="14"
+          d="M 22 92
+             C 22 35, 28 14, 56 14
+             C 80 14, 84 50, 84 86
+             C 84 50, 96 14, 122 14
+             C 148 14, 152 38, 152 92"
         />
-        {/* Calligraphic connector - a downward arc from M's bottom-right
-            looping under the baseline and rising into J's bottom-left.
-            Thinner than the letters so it reads as a flourish, not a
-            third letter. */}
+        {/* Calligraphic baseline flourish - thin sweep from M's exit to
+            J's entry. Lighter so it reads as a connecting hairline, not
+            a third letter. */}
         <path
           className="mj-stroke mj-stroke-2"
-          d="M 130 128 Q 162 152, 188 128"
-          strokeWidth="7"
-          opacity="0.65"
+          d="M 152 92 C 170 102, 190 102, 200 92"
+          strokeWidth="2"
+          opacity="0.55"
         />
-        {/* J - vertical bar with hook at the bottom */}
+        {/* J - clean vertical descending into a smooth hook curve */}
         <path
           className="mj-stroke mj-stroke-3"
-          d="M 250 16 L 250 92 Q 250 128, 218 128 Q 188 128, 188 100"
-          strokeWidth="14"
+          d="M 232 14
+             L 232 72
+             C 232 92, 210 98, 192 90
+             C 180 84, 180 72, 192 70"
         />
       </svg>
 
