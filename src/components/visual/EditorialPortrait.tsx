@@ -118,29 +118,47 @@ export function EditorialPortrait() {
         }}
       />
 
-      {/* Custom geometric MJ - hand-built SVG, no font dependency. Sharp
-          angular M (4-stroke chevron) + clean J (vertical + hook).
-          Stroked in primary so it themes correctly. */}
+      {/* Calligraphic line-art MJ - three sequenced strokes drawn on like
+          a signature: M first, a baseline arc connecting M's bottom-right
+          to J's bottom-left (the calligraphic flourish), then J with its
+          hook. Stroked in primary, rounded caps, no font dependency.
+          The mj-stroke class on each path drives the stagger via CSS. */}
       <svg
         className="mj-letters relative select-none"
-        viewBox="0 0 320 140"
+        viewBox="0 0 280 140"
         fill="none"
         stroke="var(--primary)"
-        strokeWidth="22"
-        strokeLinejoin="miter"
-        strokeMiterlimit="2"
-        strokeLinecap="square"
+        strokeLinejoin="round"
+        strokeLinecap="round"
         style={{
-          width: "78%",
+          width: "82%",
           maxWidth: "560px",
           height: "auto",
         }}
         aria-label="Mitul Jagad monogram"
       >
         {/* M - 4 angular strokes meeting at sharp peaks */}
-        <path d="M 20 130 L 20 14 L 75 90 L 130 14 L 130 130" />
+        <path
+          className="mj-stroke mj-stroke-1"
+          d="M 20 128 L 20 16 L 75 92 L 130 16 L 130 128"
+          strokeWidth="14"
+        />
+        {/* Calligraphic connector - a downward arc from M's bottom-right
+            looping under the baseline and rising into J's bottom-left.
+            Thinner than the letters so it reads as a flourish, not a
+            third letter. */}
+        <path
+          className="mj-stroke mj-stroke-2"
+          d="M 130 128 Q 162 152, 188 128"
+          strokeWidth="7"
+          opacity="0.65"
+        />
         {/* J - vertical bar with hook at the bottom */}
-        <path d="M 270 14 L 270 92 Q 270 130, 232 130 Q 196 130, 196 96" />
+        <path
+          className="mj-stroke mj-stroke-3"
+          d="M 250 16 L 250 92 Q 250 128, 218 128 Q 188 128, 188 100"
+          strokeWidth="14"
+        />
       </svg>
 
       {/* Cursor-tracking spotlight - now covers the full stage since there's

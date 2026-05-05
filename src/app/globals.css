@@ -394,23 +394,36 @@ html.lenis body {
 }
 
 .mj-letters {
-  /* Custom SVG monogram - stroked path with cursor-driven 3D tilt.
-     Background-clip text + sheen rules removed (SVG instead of font). */
+  /* Calligraphic SVG monogram - stroked paths with cursor-driven 3D tilt
+     + sequenced draw-on inside the SVG (per-path classes below). */
   transform:
     rotateX(calc((0.5 - var(--my)) * 14deg))
     rotateY(calc((var(--mx) - 0.5) * 16deg));
   transform-style: preserve-3d;
   opacity: 0;
-  scale: 0.88;
+  scale: 0.92;
   transition:
     transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 700ms ease,
     scale 700ms cubic-bezier(0.34, 1.56, 0.64, 1),
     filter 280ms ease;
-  /* Idle float only (no sheen on SVG strokes) */
   animation: mj-float 7s ease-in-out infinite;
   filter: drop-shadow(0 4px 18px color-mix(in srgb, var(--primary) 22%, transparent));
 }
+
+/* Sequenced draw-on for each MJ stroke. Dasharray is large enough to
+   cover the longest path; the .mj-mounted state animates dashoffset
+   to 0 with a per-stroke delay so M draws first, the calligraphic
+   bridge draws second, and J finishes the signature. */
+.mj-stroke {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  transition: stroke-dashoffset 1100ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.mj-mounted .mj-stroke-1 { stroke-dashoffset: 0; transition-delay: 200ms; }
+.mj-mounted .mj-stroke-2 { stroke-dashoffset: 0; transition-delay: 1000ms; transition-duration: 500ms; }
+.mj-mounted .mj-stroke-3 { stroke-dashoffset: 0; transition-delay: 1300ms; transition-duration: 1100ms; }
 
 .mj-mounted .mj-letters {
   opacity: 1;
@@ -443,6 +456,11 @@ html.lenis body {
     transition: none !important;
     opacity: 1 !important;
     scale: 1 !important;
+  }
+  .mj-stroke {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
   }
   .mj-spotlight { opacity: 0 !important; }
 }
