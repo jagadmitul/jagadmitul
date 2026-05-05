@@ -117,6 +117,7 @@
   --font-sans: var(--font-instrument-sans), "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
   --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
+  --font-script: var(--font-pinyon), "Pinyon Script", "Apple Chancery", cursive;
 
   /* Original palette legacy aliases — preserves existing class names */
   --color-light: var(--paper);
@@ -394,8 +395,21 @@ html.lenis body {
 }
 
 .mj-letters {
-  /* Calligraphic SVG monogram - stroked paths with cursor-driven 3D tilt
-     + sequenced draw-on inside the SVG (per-path classes below). */
+  /* Pinyon Script MJ monogram - real signature font with a slow sheen
+     sweep across the letters (background-clip: text), 3D cursor tilt,
+     and idle float. */
+  background: linear-gradient(
+    115deg,
+    var(--primary) 35%,
+    color-mix(in srgb, var(--primary) 30%, var(--paper-2) 70%) 50%,
+    var(--primary) 65%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
   transform:
     rotateX(calc((0.5 - var(--my)) * 14deg))
     rotateY(calc((var(--mx) - 0.5) * 16deg));
@@ -404,26 +418,19 @@ html.lenis body {
   scale: 0.92;
   transition:
     transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 700ms ease,
-    scale 700ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 800ms ease,
+    scale 800ms cubic-bezier(0.34, 1.56, 0.64, 1),
     filter 280ms ease;
-  animation: mj-float 7s ease-in-out infinite;
+  animation:
+    mj-sheen 7s ease-in-out infinite,
+    mj-float 7s ease-in-out infinite;
   filter: drop-shadow(0 4px 18px color-mix(in srgb, var(--primary) 22%, transparent));
 }
 
-/* Sequenced draw-on for each MJ stroke. Dasharray is large enough to
-   cover the longest path; the .mj-mounted state animates dashoffset
-   to 0 with a per-stroke delay so M draws first, the calligraphic
-   bridge draws second, and J finishes the signature. */
-.mj-stroke {
-  stroke-dasharray: 600;
-  stroke-dashoffset: 600;
-  transition: stroke-dashoffset 1100ms cubic-bezier(0.65, 0, 0.35, 1);
+@keyframes mj-sheen {
+  0%, 100% { background-position: 100% 0; }
+  50%      { background-position: -100% 0; }
 }
-
-.mj-mounted .mj-stroke-1 { stroke-dashoffset: 0; transition-delay: 200ms; }
-.mj-mounted .mj-stroke-2 { stroke-dashoffset: 0; transition-delay: 1000ms; transition-duration: 500ms; }
-.mj-mounted .mj-stroke-3 { stroke-dashoffset: 0; transition-delay: 1300ms; transition-duration: 1100ms; }
 
 .mj-mounted .mj-letters {
   opacity: 1;

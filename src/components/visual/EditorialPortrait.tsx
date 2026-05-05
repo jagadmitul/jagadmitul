@@ -118,54 +118,24 @@ export function EditorialPortrait() {
         }}
       />
 
-      {/* Signature-style MJ - thin flowing strokes, all smooth curves
-          (no sharp angles), drawn on in sequence like a real signature.
-          Three strokes: M as one continuous cursive shape, a thin
-          baseline flourish connecting the letters, J descending with a
-          hook. ~3px stroke - the elegant weight, not the chunky one. */}
-      <svg
+      {/* MJ rendered in Pinyon Script - a real signature font designed by
+          a type designer for this exact purpose (wedding invitations,
+          high-end stationery). Beats anything I can hand-curve in SVG.
+          Sheen sweep + cursor tilt + idle float + mount fade-in all
+          apply to the type itself. */}
+      <div
         className="mj-letters relative select-none"
-        viewBox="0 0 280 110"
-        fill="none"
-        stroke="var(--primary)"
-        strokeWidth="3"
-        strokeLinejoin="round"
-        strokeLinecap="round"
         style={{
-          width: "82%",
-          maxWidth: "560px",
-          height: "auto",
+          fontFamily: "var(--font-script)",
+          fontSize: "clamp(8rem, 18vw, 15rem)",
+          lineHeight: 1,
+          letterSpacing: "-0.02em",
+          paddingBottom: "0.15em" /* descender room for "j" */,
         }}
         aria-label="Mitul Jagad monogram"
       >
-        {/* M as a single flowing cursive stroke - two smooth peaks with
-            curves at the bottom (not angular hairpin valleys). */}
-        <path
-          className="mj-stroke mj-stroke-1"
-          d="M 22 92
-             C 22 35, 28 14, 56 14
-             C 80 14, 84 50, 84 86
-             C 84 50, 96 14, 122 14
-             C 148 14, 152 38, 152 92"
-        />
-        {/* Calligraphic baseline flourish - thin sweep from M's exit to
-            J's entry. Lighter so it reads as a connecting hairline, not
-            a third letter. */}
-        <path
-          className="mj-stroke mj-stroke-2"
-          d="M 152 92 C 170 102, 190 102, 200 92"
-          strokeWidth="2"
-          opacity="0.55"
-        />
-        {/* J - clean vertical descending into a smooth hook curve */}
-        <path
-          className="mj-stroke mj-stroke-3"
-          d="M 232 14
-             L 232 72
-             C 232 92, 210 98, 192 90
-             C 180 84, 180 72, 192 70"
-        />
-      </svg>
+        Mj
+      </div>
 
       {/* Cursor-tracking spotlight - now covers the full stage since there's
           no glass plate to clip it. Soft primary radial that follows the

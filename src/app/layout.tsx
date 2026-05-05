@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import {
+  Instrument_Sans,
+  Instrument_Serif,
+  JetBrains_Mono,
+  Pinyon_Script,
+} from "next/font/google";
 import "./globals.css";
 import { NO_FLASH_SCRIPT, PaletteProvider } from "@/lib/palette";
 import { LenisProvider } from "@/lib/lenis";
@@ -36,6 +41,16 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+// Pinyon Script - elegant flowing cursive, used for the "MJ" signature
+// monogram on the IntroCard. Single weight (400) - designed for the
+// signature/script use case it's used for here.
+const pinyonScript = Pinyon_Script({
+  variable: "--font-pinyon",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Mitul Jagad - Senior Full Stack Developer & AI Agents Engineer",
   description:
@@ -60,7 +75,7 @@ export default function RootLayout({
       lang="en"
       data-palette="default"
       suppressHydrationWarning
-      className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrains.variable}`}
+      className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrains.variable} ${pinyonScript.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />
