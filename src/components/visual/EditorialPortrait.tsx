@@ -118,20 +118,30 @@ export function EditorialPortrait() {
         }}
       />
 
-      {/* MJ letterforms - bold upright Instrument Sans (no italic, no
-          serif). Tighter letter-spacing pulls the M and J close so they
-          read as a unified mark. */}
-      <div
-        className="mj-letters relative font-sans select-none"
+      {/* Custom geometric MJ - hand-built SVG, no font dependency. Sharp
+          angular M (4-stroke chevron) + clean J (vertical + hook).
+          Stroked in primary so it themes correctly. */}
+      <svg
+        className="mj-letters relative select-none"
+        viewBox="0 0 320 140"
+        fill="none"
+        stroke="var(--primary)"
+        strokeWidth="22"
+        strokeLinejoin="miter"
+        strokeMiterlimit="2"
+        strokeLinecap="square"
         style={{
-          fontWeight: 700,
-          fontSize: "clamp(7rem, 16vw, 13rem)",
-          lineHeight: 1,
-          letterSpacing: "-0.08em",
+          width: "78%",
+          maxWidth: "560px",
+          height: "auto",
         }}
+        aria-label="Mitul Jagad monogram"
       >
-        MJ
-      </div>
+        {/* M - 4 angular strokes meeting at sharp peaks */}
+        <path d="M 20 130 L 20 14 L 75 90 L 130 14 L 130 130" />
+        {/* J - vertical bar with hook at the bottom */}
+        <path d="M 270 14 L 270 92 Q 270 130, 232 130 Q 196 130, 196 96" />
+      </svg>
 
       {/* Cursor-tracking spotlight - now covers the full stage since there's
           no glass plate to clip it. Soft primary radial that follows the

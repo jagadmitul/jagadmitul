@@ -394,18 +394,8 @@ html.lenis body {
 }
 
 .mj-letters {
-  background: linear-gradient(
-    115deg,
-    var(--primary) 35%,
-    color-mix(in srgb, var(--primary) 35%, var(--paper-2) 65%) 50%,
-    var(--primary) 65%
-  );
-  background-size: 250% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  /* Custom SVG monogram - stroked path with cursor-driven 3D tilt.
+     Background-clip text + sheen rules removed (SVG instead of font). */
   transform:
     rotateX(calc((0.5 - var(--my)) * 14deg))
     rotateY(calc((var(--mx) - 0.5) * 16deg));
@@ -417,10 +407,9 @@ html.lenis body {
     opacity 700ms ease,
     scale 700ms cubic-bezier(0.34, 1.56, 0.64, 1),
     filter 280ms ease;
-  animation:
-    mj-sheen 7s ease-in-out infinite,
-    mj-float 7s ease-in-out infinite;
-  filter: drop-shadow(0 4px 20px color-mix(in srgb, var(--primary) 25%, transparent));
+  /* Idle float only (no sheen on SVG strokes) */
+  animation: mj-float 7s ease-in-out infinite;
+  filter: drop-shadow(0 4px 18px color-mix(in srgb, var(--primary) 22%, transparent));
 }
 
 .mj-mounted .mj-letters {
@@ -440,11 +429,6 @@ html.lenis body {
 .mj-stage.mj-active .mj-letters {
   scale: 1.03;
   filter: drop-shadow(0 8px 28px color-mix(in srgb, var(--primary) 40%, transparent));
-}
-
-@keyframes mj-sheen {
-  0%, 100% { background-position: 100% 0; }
-  50%      { background-position: -100% 0; }
 }
 
 @keyframes mj-float {
