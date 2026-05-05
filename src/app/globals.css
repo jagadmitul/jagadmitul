@@ -382,6 +382,111 @@ html.lenis body {
   animation: cycling-number-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* MJ monogram (EditorialPortrait v4).
+   ---------------------------------------------------
+   The stage holds CSS variables --mx / --my (set by the React component
+   on mousemove). Letters and glass plate consume those variables for the
+   3D tilt + spotlight. Individual transform properties (translate /
+   rotate / scale) keep mount, float, and tilt from fighting each other. */
+
+.mj-stage {
+  transform-style: preserve-3d;
+}
+
+.mj-letters {
+  background: linear-gradient(
+    115deg,
+    var(--primary) 35%,
+    color-mix(in srgb, var(--primary) 35%, var(--paper-2) 65%) 50%,
+    var(--primary) 65%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transform:
+    rotateX(calc((0.5 - var(--my)) * 14deg))
+    rotateY(calc((var(--mx) - 0.5) * 16deg));
+  transform-style: preserve-3d;
+  opacity: 0;
+  scale: 0.88;
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 700ms ease,
+    scale 700ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 280ms ease;
+  animation:
+    mj-sheen 7s ease-in-out infinite,
+    mj-float 7s ease-in-out infinite;
+  filter: drop-shadow(0 4px 20px color-mix(in srgb, var(--primary) 25%, transparent));
+}
+
+.mj-mounted .mj-letters {
+  opacity: 1;
+  scale: 1;
+}
+
+.mj-glass {
+  transform:
+    rotateX(calc((0.5 - var(--my)) * 8deg))
+    rotateY(calc((var(--mx) - 0.5) * 10deg))
+    translateZ(-30px);
+  opacity: 0;
+  scale: 0.94;
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 600ms ease,
+    scale 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mj-mounted .mj-glass {
+  opacity: 1;
+  scale: 1;
+}
+
+.mj-spotlight {
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.mj-stage.mj-active .mj-spotlight {
+  opacity: 0.7;
+}
+
+.mj-stage.mj-active .mj-letters {
+  scale: 1.03;
+  filter: drop-shadow(0 8px 28px color-mix(in srgb, var(--primary) 40%, transparent));
+}
+
+@keyframes mj-sheen {
+  0%, 100% { background-position: 100% 0; }
+  50%      { background-position: -100% 0; }
+}
+
+@keyframes mj-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mj-letters {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+  }
+  .mj-glass {
+    transform: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+  }
+  .mj-spotlight { opacity: 0 !important; }
+}
+
 /* SVG stroke draw-on (used by EditorialPortrait + retired /concepts route).
    The element starts hidden via dasharray=400/dashoffset=400; the .drawn
    class transitions the offset to 0 over ~1.6s so the stroke "draws on".
