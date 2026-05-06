@@ -138,7 +138,8 @@ High-performance operations dashboard with real-time CRUD, automated reporting, 
 <br/>
 
 <div align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=jagadmitul&bg_color=0d1117&color=58a6ff&line=1f6feb&point=e34c26&area=true&area_color=1f6feb&hide_border=true" width="95%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=jagadmitul&layout=compact&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=58a6ff&text_color=8b949e&langs_count=8" width="48%" />
+  <img src="https://ghchart.rshah.org/1f6feb/jagadmitul" alt="Mitul Jagad's GitHub contribution graph" width="48%" />
 </div>
 
 ---
