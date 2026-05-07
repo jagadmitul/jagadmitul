@@ -131,14 +131,13 @@ High-performance operations dashboard with real-time CRUD, automated reporting, 
 ### `> github_stats`
 
 <div align="center">
-  <img height="170em" src="https://github-readme-stats.vercel.app/api?username=jagadmitul&show_icons=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=58a6ff&icon_color=1f6feb&text_color=8b949e&ring_color=1f6feb&count_private=true" alt="Mitul Jagad's GitHub stats" />
-  <img height="170em" src="https://github-readme-streak-stats.herokuapp.com/?user=jagadmitul&theme=github-dark-blue&hide_border=true&background=0d1117&stroke=1f6feb&ring=1f6feb&fire=e34c26&currStreakLabel=58a6ff&sideLabels=8b949e&dates=8b949e" alt="Mitul Jagad's GitHub streak" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=jagadmitul&theme=github-dark-blue&hide_border=true&background=0d1117&stroke=1f6feb&ring=1f6feb&fire=e34c26&currStreakLabel=58a6ff&sideLabels=8b949e&dates=8b949e" alt="Mitul Jagad's GitHub streak" />
 </div>
 
 <br/>
 
 <div align="center">
-  <img src="https://ghchart.rshah.org/26a641/jagadmitul" alt="Mitul Jagad's GitHub contribution graph" width="100%" />
+  <img src="https://ghchart.rshah.org/26a641/jagadmitul" alt="Mitul Jagad's GitHub contribution graph (live, updates with every push)" width="100%" />
 </div>
 
 ---
